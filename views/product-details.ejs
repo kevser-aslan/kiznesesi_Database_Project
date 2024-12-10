@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ürün Detayları</title>
+  <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body class="page-product-details">
+  <%- include('partials/header') %>
+
+  <main class="main-content">
+    <div class="product-details-container">
+        <div class="product-image">
+          <img src="<%= product.image %>" alt="<%= product.name %>" class="product-img">
+        </div>
+      
+        <div class="product-info">
+          <h1 class="product-title"><%= product.name %></h1>
+          <p class="product-description"><%= product.description %></p>
+          <p class="product-price">Fiyat: <%= product.price %> TL</p>
+          <a href="/cart" class="btn-add-to-cart">Sepete Ekle</a>
+        </div>
+      </div>
+      
+      
+      
+  </main>
+
+  <%- include('partials/footer') %>
+</body>
+</html>
