@@ -1,11 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+// About sayfası
 router.get('/', (req, res) => {
-    // title'ı burada parametre olarak gönderiyoruz
-    res.render('index', { title: 'E-Ticaret Anasayfa' });
-  });
-  
-
+  res.render('about');  // 'about.ejs' sayfasını render eder
+});
 
 module.exports = router;
