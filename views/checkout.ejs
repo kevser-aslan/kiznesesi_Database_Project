@@ -1,0 +1,36 @@
+<!-- views/checkout.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ödeme Sayfası</title>
+</head>
+<body>
+    <h1>Ödeme Sayfası</h1>
+    <div>
+        <h3>Sepetteki Ürünler</h3>
+        <ul>
+            <% cartItems.forEach(function(item) { %>
+                <li>
+                    <p><%= item.name %> - <%= item.price %> TL (Miktar: <%= item.quantity %>)</p>
+                </li>
+            <% }); %>
+        </ul>
+        <h3>Toplam Tutar: <%= totalAmount %> TL</h3>
+        <form action="/cart/checkout/process" method="POST">
+            <label for="address">Adres:</label>
+            <textarea name="address" required></textarea>
+
+            <label for="shipping_company">Kargo Şirketi Seçin:</label>
+            <select name="shipping_company" required>
+                <% shippingCompanies.forEach(function(company) { %>
+                    <option value="<%= company.id %>"><%= company.name %> - <%= company.price %> TL</option>
+                <% }); %>
+            </select>
+
+            <button type="submit">Ödeme Yap</button>
+        </form>
+    </div>
+</body>
+</html>
