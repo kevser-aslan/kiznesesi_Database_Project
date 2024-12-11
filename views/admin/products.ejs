@@ -1,0 +1,32 @@
+<!-- views/admin/products.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Ürünler</title>
+</head>
+<body>
+    <h1>Ürünler</h1>
+    <a href="/admin/products/add">Yeni Ürün Ekle</a><br><br>
+    <table>
+        <tr>
+            <th>Ürün Adı</th>
+            <th>Fiyat</th>
+            <th>Stok</th>
+            <th>İşlemler</th>
+        </tr>
+        <% products.forEach(function(product) { %>
+            <tr>
+                <td><%= product.name %></td>
+                <td><%= product.price %></td>
+                <td><%= product.stock %></td>
+                <td>
+                    <a href="/admin/products/edit/<%= product.id %>">Düzenle</a> | 
+                    <a href="/admin/products/delete/<%= product.id %>">Sil</a>
+                </td>
+            </tr>
+        <% }); %>
+    </table>
+</body>
+</html>

@@ -5,9 +5,20 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const mysql = require('mysql2');
 
+
 // Uygulama Başlatma
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Oturum ayarları
+app.use(
+    session({
+      secret: '1a25df58s5',
+      resave: false,
+      saveUninitialized: false,
+      cookie: { secure: false }, // HTTPS varsa true yapın
+    })
+  );
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -43,9 +54,10 @@ const homeRoutes = require('./routes/homeRoutes');  // Ana sayfa rotası
 const productsRoutes = require('./routes/productsRoutes');  // Ürünler rotası
 const cartRoutes = require('./routes/cartRoutes');  // Sepet rotası
 const userRoutes = require('./routes/userRoutes');  // Kullanıcı işlemleri rotası
+const adminRoutes = require('./routes/adminRoutes');  // admin  işlemleri rotası
 const contactRoutes = require('./routes/contactRoutes');  // İletişim rotasını dahil ediyoruz
 const aboutRoutes = require('./routes/aboutRoutes');  // About rotasını dahil ediyoruz
-
+const profileRoutes = require('./routes/profileRoutes');
 
 
 
@@ -55,8 +67,10 @@ app.use('/products', productsRoutes);  // Ürünler
 
 app.use('/cart', cartRoutes);  // Sepet
 app.use('/user', userRoutes);  // Kullanıcı
+app.use('/admin', adminRoutes);  // admin
 app.use('/contact', contactRoutes);  // İletişim sayfası rotası
 app.use('/about', aboutRoutes);  // About sayfası rotası
+app.use('/profile', profileRoutes);  // Profil sayfası rotasını ekle
 // 404 Hata Sayfası
 app.use((req, res) => {
   res.status(404).render('404', { title: 'Sayfa Bulunamadı' });

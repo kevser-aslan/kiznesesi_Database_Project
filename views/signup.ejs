@@ -24,9 +24,24 @@
         <label for="password" class="form-label">Şifre:</label>
         <input type="password" id="password" name="password" class="form-input" required>
       </div>
+      <div class="form-group">
+        <label for="phone_number" class="form-label">Telefon Numarası:</label>
+        <input type="text" id="phone_number" name="phone_number" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label for="address" class="form-label">Adres:</label>
+        <textarea id="address" name="address" class="form-input" rows="3" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="role" class="form-label">Rol:</label>
+        <select id="role" name="role" class="form-input" required>
+          <option value="user">Kullanıcı</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
       <button type="submit" class="btn btn-signup">Kayıt Ol</button>
       <p class="form-text">
-        Zaten hesabınız var mı? <a href="/login" class="form-link">Giriş Yap</a>
+        Zaten hesabınız var mı? <a href="/user/login" class="form-link">Giriş Yap</a>
       </p>
     </form>
   </main>

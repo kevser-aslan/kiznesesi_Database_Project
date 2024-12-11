@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcı Dashboard</title>
+</head>
+<body>
+   
+    <nav>
+        <ul>
+          <li><a href="/cart">Sepet</a></li> <!-- Sepet linki -->
+          <li><a href="/profile">Profil</a></li> <!-- Profil linki -->
+       
+          <li><a href="/orders">Siparişler</a></li> <!-- Siparişler linki -->
+          <li><a href="/logout">Çıkış Yap</a></li> <!-- Çıkış linki -->
+        </ul>
+      </nav>
+    
+    <h1>Hoşgeldiniz, <%= user.name %>!</h1>
+    <h2>Ürünler</h2>
+    <div>
+        <% products.forEach(function(product) { %>
+            <div>
+                <!-- Ürünün detay sayfasına yönlendiren link -->
+                <a href="/products/<%= product.id %>">
+                    <h3><%= product.name %></h3>
+                    <p><%= product.description %></p>
+                    <p>Fiyat: <%= product.price %> TL</p>
+                    <img src="<%= product.image_url %>" alt="<%= product.name %>" width="100">
+                </a>
+            </div>
+        <% }); %>
+    </div>
+</body>
+</html>
