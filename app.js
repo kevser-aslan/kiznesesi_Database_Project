@@ -5,9 +5,20 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const mysql = require('mysql2');
 
+
 // Uygulama Başlatma
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Oturum ayarları
+app.use(
+    session({
+      secret: '1a25df58s5',
+      resave: false,
+      saveUninitialized: false,
+      cookie: { secure: false }, // HTTPS varsa true yapın
+    })
+  );
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
