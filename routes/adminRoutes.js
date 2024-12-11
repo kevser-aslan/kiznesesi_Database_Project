@@ -46,4 +46,41 @@ router.get('/products', async (req, res) => {
   });
   
 
+  router.get('/messages', async (req, res) => {
+    try {
+        // Tüm mesajları getir
+        const [messages] = await db.execute(
+            `SELECT * FROM support_messages ORDER BY created_at DESC`
+        );
+
+        // Mesajları admin şablonuna ilet
+        res.render('admin-messages', { messages });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Mesajları görüntülerken bir hata oluştu.');
+    }
+});
+
+router.post('/respond/:messageId', async (req, res) => {
+  const { response } = req.body; // Adminin cevabı
+  const messageId = req.params.messageId; // Mesaj ID
+
+  try {
+      // Veritabanında mesajı güncelle
+      await db.execute(
+          `UPDATE support_messages 
+           SET response = ? 
+           WHERE id = ?`,
+          [response, messageId]
+      );
+
+      // Admin paneline geri yönlendir
+      res.redirect('/admin/messages');
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Cevap verirken bir hata oluştu.');
+  }
+});
+
+
 module.exports = router;

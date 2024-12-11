@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Destek Mesajları</title>
+</head>
+<body>
+    <h1>Destek Mesajları (Admin Paneli)</h1>
+
+    <% if (messages.length > 0) { %>
+        <ul>
+            <% messages.forEach(function(message) { %>
+                <li>
+                    <strong>Kullanıcı ID:</strong> <%= message.user_id %> <br>
+                    <strong>Email:</strong> <%= message.email %> <br>
+                    <strong>Mesaj:</strong> <%= message.message %> <br>
+                    <strong>Gönderim Tarihi:</strong> <%= message.created_at %> <br>
+                    <% if (message.response) { %>
+                        <strong>Cevap:</strong> <%= message.response %>
+                    <% } else { %>
+                        Henüz cevaplanmadı.
+                    <% } %>
+                    <form action="/admin/respond/<%= message.id %>" method="POST">
+                        <textarea name="response" placeholder="Cevap yaz..."></textarea>
+                        <button type="submit">Cevapla</button>
+                    </form>
+                    <hr>
+                </li>
+            <% }); %>
+            
+        </ul>
+    <% } else { %>
+        <p>Hiç mesaj bulunmamaktadır.</p>
+    <% } %>
+
+    <a href="/">Anasayfaya Dön</a>
+</body>
+</html>
