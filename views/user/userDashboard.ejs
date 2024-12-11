@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kullanıcı Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
    
@@ -17,7 +18,7 @@
         </ul>
       </nav>
     
-    <h1>Hoşgeldiniz, <%= user.name %>!</h1>
+    <h1 class="userDashboardH1">Hoşgeldiniz, <%= user.name %>!</h1>
     <h2>Ürünler</h2>
     <div>
         <% products.forEach(function(product) { %>

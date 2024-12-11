@@ -49,6 +49,7 @@ db.connect((err) => {
   }
 });
 
+
 // Routes - Her bir route dosyasını manuel dahil ediyoruz
 const homeRoutes = require('./routes/homeRoutes');  // Ana sayfa rotası
 const productsRoutes = require('./routes/productsRoutes');  // Ürünler rotası
