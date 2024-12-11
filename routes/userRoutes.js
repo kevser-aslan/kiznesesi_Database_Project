@@ -36,9 +36,9 @@ router.post('/login', async (req, res) => {
   
         // Role'e göre yönlendirme
         if (user.role === 'admin') {
-          res.redirect('/admin-dashboard'); // Admin paneline yönlendir
+          res.redirect('/user/admin-dashboard'); // Admin paneline yönlendir
         } else {
-          res.redirect('/user-dashboard'); // Kullanıcı paneline yönlendir
+          res.redirect('/user/user-dashboard'); // Kullanıcı dashboard'una yönlendir
         }
       } else {
         res.status(401).send('Geçersiz e-posta veya şifre.');
@@ -48,7 +48,6 @@ router.post('/login', async (req, res) => {
       res.status(500).send('Giriş sırasında bir hata oluştu.');
     }
   });
-  
 
 // Kullanıcı kayıt sayfası
 router.get('/signup', (req, res) => {
@@ -71,6 +70,32 @@ router.post('/signup', async (req, res) => {
     res.status(500).send('Kayıt sırasında bir hata oluştu.');
   }
 });
+
+// Kullanıcı Dashboard
+router.get('/user-dashboard', requireLogin, (req, res) => {
+    res.render('user/userDashboard', { user: req.session.user });
+  });
+
+
+  // Admin Dashboard
+router.get('/admin-dashboard', requireLogin, (req, res) => {
+    // Admin'e özel sayfa, admin bilgilerini de alabiliriz
+    if (req.session.user.role === 'admin') {
+      res.render('admin/adminDashboard', { user: req.session.user });
+    } else {
+      res.redirect('/user-dashboard'); // Eğer admin değilse, normal kullanıcıya yönlendir
+    }
+  });
+// Kullanıcı çıkışı
+router.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).send('Çıkış sırasında bir hata oluştu.');
+    }
+    res.redirect('/user/login');
+  });
+});
+
 
 // Hesap ayarları
 router.get('/account-settings', requireLogin, (req, res) => {

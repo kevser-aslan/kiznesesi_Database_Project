@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/admin/admin-dashboard">Admin Dashboard</a></li>
+                <li><a href="/user/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Welcome, Admin <%= user.name %>!</h1>
+        <p>Email: <%= user.email %></p>
+        <p>Phone Number: <%= user.phone_number %></p>
+        <p>Role: <%= user.role %></p>
+
+        <h2>Manage Users</h2>
+        <p><a href="/admin/manage-users">Manage users</a></p>
+
+        <h2>View Orders</h2>
+        <p><a href="/admin/orders">View orders</a></p>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 E-Commerce</p>
+    </footer>
+</body>
+</html>
