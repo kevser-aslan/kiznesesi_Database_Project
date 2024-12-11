@@ -193,7 +193,7 @@ router.post('/checkout/process', async (req, res) => {
 
 
 
-// **Sipariş Durumu Görüntüleme**
+// Sipariş Detayı Görüntüleme
 router.get('/order/:orderId', async (req, res) => {
     const orderId = req.params.orderId;
     const userId = req.session.user.id; // Kullanıcı id'si
@@ -207,16 +207,29 @@ router.get('/order/:orderId', async (req, res) => {
             [orderId, userId]
         );
 
+      // Siparişin ürünlerini doğru bir şekilde alırken, name kullanılmalı
+const [orderItems] = await db.execute(
+    `SELECT oi.quantity, p.name AS product_name, p.price
+    FROM order_items oi
+    JOIN products p ON oi.product_id = p.id
+    WHERE oi.order_id = ?`,
+    [orderId]
+);
+
+
         if (orderDetails.length === 0) {
             return res.status(404).send('Sipariş bulunamadı.');
         }
 
-        res.render('order-details', { order: orderDetails[0] });
+        // Sipariş detayları ve ürün bilgileri ile şablona veri gönder
+        res.render('order-details', { order: orderDetails[0], orderItems: orderItems });
+
     } catch (error) {
         console.error(error);
         res.status(500).send('Sipariş detayı alınırken bir hata oluştu.');
     }
 });
+
 
 // **Kargo Durumu Güncelleme**
 router.post('/order/update-shipping/:orderId', async (req, res) => {

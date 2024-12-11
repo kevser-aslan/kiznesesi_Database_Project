@@ -12,17 +12,24 @@
     <p><strong>Sipariş Durumu:</strong> <%= order.status %></p>
     <p><strong>Toplam Tutar:</strong> <%= order.total_amount %> TL</p>
     <p><strong>Adres:</strong> <%= order.address %></p>
-    <p><strong>Kargo Durumu:</strong> <%= order.shipping_status %></p>
+    <!-- Kargo durumu kontrolü ve görünürlüğü -->
+    <% if (order.shipping_status) { %>
+        <p><strong>Kargo Durumu:</strong> <%= order.shipping_status %></p>
+    <% } else { %>
+        <p><strong>Kargo Durumu:</strong> Belirtilmedi</p>
+    <% } %>
 
     <h3>Siparişe Ait Ürünler:</h3>
     <ul>
         <% orderItems.forEach(function(item) { %>
             <li>
-                <p><%= item.name %> - <%= item.quantity %> x <%= item.price %> TL</p>
+                <p><%= item.product_name %> - <%= item.quantity %> x <%= item.price %> TL</p>
             </li>
         <% }); %>
+        
     </ul>
 
+    <!-- Kargo Durumu Güncelleme Formu -->
     <% if (order.shipping_status !== 'delivered') { %>
         <h3>Kargo Durumunu Güncelle:</h3>
         <form action="/cart/order/update-shipping/<%= order.id %>" method="POST">
