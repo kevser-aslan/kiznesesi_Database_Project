@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sipariş Detayları</title>
+</head>
+<body>
+    <h1>Sipariş Detayları</h1>
+
+    <h2>Sipariş Durumu</h2>
+    <p><strong>Sipariş Durumu:</strong> <%= order.status %></p>
+    <p><strong>Toplam Tutar:</strong> <%= order.total_amount %> TL</p>
+    <p><strong>Adres:</strong> <%= order.address %></p>
+
+    <!-- Kargo durumu kontrolü ve görünürlüğü -->
+    <% if (order.shipping_status) { %>
+        <p><strong>Kargo Durumu:</strong> <%= order.shipping_status %></p>
+    <% } else { %>
+        <p><strong>Kargo Durumu:</strong> Belirtilmedi</p>
+    <% } %>
+
+    <h3>Siparişe Ait Ürünler:</h3>
+    <ul>
+        <% orderItems.forEach(function(item) { %>
+            <li>
+                <p><%= item.product_name %> - <%= item.quantity %> x <%= item.price %> TL</p>
+            </li>
+        <% }); %>
+    </ul>
+
+    <!-- Kargo Durumu Güncelleme Formu -->
+    <% if (order.shipping_status !== 'delivered') { %>
+        <h3>Kargo Durumunu Güncelle:</h3>
+        <form action="/cart/order/update-shipping/<%= order.id %>" method="POST">
+            <label for="shipping_status">Kargo Durumu:</label>
+            <select name="shipping_status">
+                <option value="pending" <% if (order.shipping_status === 'pending') { %>selected<% } %>>Beklemede</option>
+                <option value="shipped" <% if (order.shipping_status === 'shipped') { %>selected<% } %>>Gönderildi</option>
+                <option value="delivered" <% if (order.shipping_status === 'delivered') { %>selected<% } %>>Teslim Edildi</option>
+            </select>
+            <button type="submit">Kargo Durumunu Güncelle</button>
+        </form>
+    <% } %>
+
+    <br>
+    <a href="/cart">Sepete Dön</a>
+</body>
+</html>

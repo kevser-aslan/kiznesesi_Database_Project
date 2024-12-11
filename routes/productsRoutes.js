@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Ürün detay sayfası (Yorumları da dahil et)
+// Ürün detayları
 router.get('/:id', async (req, res) => {
   const productId = req.params.id;
 
@@ -28,12 +28,14 @@ router.get('/:id', async (req, res) => {
     // Yorumları al
     const [reviews] = await db.execute('SELECT reviews.*, users.name AS username FROM reviews JOIN users ON reviews.user_id = users.id WHERE product_id = ?', [productId]);
 
+    // Render edilen sayfada product.image_url ile görseli gönderiyoruz
     res.render('product-details', { product: product[0], reviews });
   } catch (error) {
     console.error(error);
     res.status(500).send('Ürün detayları alınırken bir hata oluştu.');
   }
 });
+
 
 // Yorum ekleme işlemi
 router.post('/reviews/add', async (req, res) => {

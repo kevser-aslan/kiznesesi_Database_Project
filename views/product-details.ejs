@@ -5,13 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ürün Detayları</title>
   <link rel="stylesheet" href="/styles/style.css">
+  <style>
+    /* Modal için stil */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      overflow: auto;
+    }
+    .modal-content {
+      margin: 10% auto;
+      display: block;
+      width: 80%;
+      max-width: 700px;
+    }
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 25px;
+      color: #f1f1f1;
+      font-size: 35px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover,
+    .close:focus {
+      color: #bbb;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body class="page-product-details">
   <%- include('partials/header') %>
 
   <main class="main-content">
     <h1><%= product.name %></h1>
-    <img src="<%= product.image %>" alt="<%= product.name %>" width="300">
+    
+    <!-- Ürün görselini tıklanabilir hale getirdik -->
+    <img src="<%= product.image_url %>" alt="<%= product.name %>" width="300" id="productImage">
+
+    
+    <!-- Modal yapısı -->
+    <div id="imageModal" class="modal">
+      <span class="close" id="closeModal">&times;</span>
+      <img class="modal-content" id="modalImage">
+    </div>
+
     <p><%= product.description %></p>
     <p>Fiyat: <%= product.price %> ₺</p>
 
@@ -54,5 +99,31 @@
   </main>
 
   <%- include('partials/footer') %>
+
+  <script>
+    // Modal açma işlevi
+    var modal = document.getElementById("imageModal");
+    var img = document.getElementById("productImage");
+    var modalImg = document.getElementById("modalImage");
+    var span = document.getElementById("closeModal");
+
+    // Görsel tıklandığında modalde göster
+    img.onclick = function() {
+      modal.style.display = "block";
+      modalImg.src = img.src;
+    }
+
+    // Modalin dışına tıklanırsa kapatma
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    // Modalin dışına tıklanırsa kapatma
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
 </body>
 </html>

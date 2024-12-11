@@ -1,0 +1,22 @@
+<!-- views/order-history.ejs -->
+<h3>Sipariş Geçmişiniz</h3>
+<ul>
+    <% orders.forEach(function(order) { %>
+        <li>
+            <p><strong>Sipariş #<%= order.id %></strong> - <%= order.status %></p>
+            <p><strong>Toplam Tutar:</strong> <%= order.total_amount %> TL</p>
+            <p><strong>Sipariş Tarihi:</strong> <%= new Date(order.order_date).toLocaleDateString() %></p>
+            
+            <h4>Ürünler:</h4>
+            <ul>
+                <% order.items.forEach(function(item) { %>
+                    <li>
+                        <img src="<%= item.image_url %>" alt="<%= item.product_name %>" width="50">
+                        <p><%= item.product_name %> - <%= item.quantity %> x <%= item.price %> TL</p>
+                    </li>
+                <% }); %>
+            </ul>
+            <a href="/cart/order/<%= order.id %>">Sipariş Detayları</a>
+        </li>
+    <% }); %>
+</ul>
