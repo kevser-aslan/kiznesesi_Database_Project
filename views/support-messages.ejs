@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destek Mesajları</title>
+</head>
+<body>
+    <h1>Destek Mesajları</h1>
+
+    <% if (messages.length > 0) { %>
+        <ul>
+            <% messages.forEach(function(message) { %>
+                <li>
+                    <strong>Gönderen:</strong> <%= message.name %> (<%= message.email %>) <br>
+                    <strong>Mesaj:</strong> <%= message.message %> <br>
+                    <strong>Cevap:</strong> 
+                    <% if (message.response) { %>
+                        <%= message.response %>
+                    <% } else { %>
+                        Henüz cevaplanmadı.
+                    <% } %>
+                    <hr>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>Hiç mesaj bulunmamaktadır.</p>
+    <% } %>
+
+    <a href="/">Anasayfaya Dön</a>
+</body>
+</html>

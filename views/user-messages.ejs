@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destek Mesajlarım</title>
+</head>
+<body>
+    <h1>Destek Mesajlarım</h1>
+
+    <% if (messages.length > 0) { %>
+        <ul>
+            <% messages.forEach(function(message) { %>
+                <li>
+                    <strong>Mesaj:</strong> <%= message.message %> <br>
+                    <strong>Gönderim Tarihi:</strong> <%= message.created_at %> <br>
+                    <strong>Durum:</strong> 
+                    <% if (message.response) { %>
+                        <em>Cevaplandı</em> <br>
+                        <strong>Admin Cevabı:</strong> <%= message.response %>
+                    <% } else { %>
+                        Henüz cevaplanmadı.
+                    <% } %>
+                    <hr>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>Hiç mesajınız bulunmamaktadır.</p>
+    <% } %>
+
+    <a href="/">Anasayfaya Dön</a>
+</body>
+</html>
