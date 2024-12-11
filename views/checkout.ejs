@@ -18,19 +18,28 @@
             <% }); %>
         </ul>
         <h3>Toplam Tutar: <%= totalAmount %> TL</h3>
+
         <form action="/cart/checkout/process" method="POST">
             <label for="address">Adres:</label>
             <textarea name="address" required></textarea>
-
+        
             <label for="shipping_company">Kargo Şirketi Seçin:</label>
             <select name="shipping_company" required>
                 <% shippingCompanies.forEach(function(company) { %>
                     <option value="<%= company.id %>"><%= company.name %> - <%= company.price %> TL</option>
                 <% }); %>
             </select>
-
+        
+            <label for="payment_method">Ödeme Yöntemi:</label>
+            <select name="payment_method" required>
+                <option value="credit_card">Kredi Kartı</option>
+                <option value="paypal">PayPal</option>
+                <option value="bank_transfer">Banka Havalesi</option>
+            </select>
+        
             <button type="submit">Ödeme Yap</button>
         </form>
+        
     </div>
 </body>
 </html>

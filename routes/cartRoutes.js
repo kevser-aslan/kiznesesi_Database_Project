@@ -119,12 +119,15 @@ router.get('/checkout', async (req, res) => {
         // Kargo şirketlerini al
         const [shippingCompanies] = await db.execute('SELECT * FROM shipping_companies');
 
+        // Ödeme yöntemlerini al
+        const paymentMethods = ['Credit Card', 'Cash on Delivery', 'PayPal'];
+
         // Sepet toplamını hesapla
         const totalAmount = cartItems.reduce((total, item) => {
             return total + item.price * item.quantity;
         }, 0);
 
-        res.render('checkout', { cartItems, totalAmount, shippingCompanies });
+        res.render('checkout', { cartItems, totalAmount, shippingCompanies, paymentMethods });
     } catch (error) {
         console.error(error);
         res.status(500).send('Ödeme sayfası görüntülenirken bir hata oluştu.');
@@ -133,10 +136,9 @@ router.get('/checkout', async (req, res) => {
 
 
 
-// **Ödeme İşlemi**
 router.post('/checkout/process', async (req, res) => {
     const userId = req.session.user.id; // Kullanıcı id'si
-    const { address, shipping_company } = req.body; // Adres ve seçilen kargo şirketi bilgisi
+    const { address, shipping_company, payment_method } = req.body; // Adres, Kargo Şirketi ve Ödeme Yöntemi
 
     try {
         // Sepet verilerini al
@@ -160,19 +162,14 @@ router.post('/checkout/process', async (req, res) => {
 
         // Sipariş oluştur
         const [orderResult] = await db.execute(
-            `INSERT INTO orders (user_id, total_amount, status, address, shipping_company_id) 
-            VALUES (?, ?, ?, ?, ?)`,
-            [userId, totalAmount, 'pending', address, shipping_company]
+            `INSERT INTO orders (user_id, total_amount, status, address, shipping_company_id, payment_method) 
+            VALUES (?, ?, ?, ?, ?, ?)`,
+            [userId, totalAmount, 'pending', address, shipping_company, payment_method] // payment_method burada ekleniyor
         );
 
         // Siparişe ait ürünleri order_items tablosuna ekle
         const orderId = orderResult.insertId;
         for (let item of cartItems) {
-            // Burada product_id'nin doğru olup olmadığını kontrol ediyorsunuz.
-            if (!item.product_id) {
-                return res.status(400).send('Bir ürün bulunamadı.');
-            }
-
             await db.execute(
                 `INSERT INTO order_items (order_id, product_id, quantity, price) 
                 VALUES (?, ?, ?, ?)`,
@@ -247,5 +244,52 @@ router.post('/order/update-shipping/:orderId', async (req, res) => {
         res.status(500).send('Kargo durumu güncellenirken bir hata oluştu.');
     }
 });
+
+router.get('/order-history', async (req, res) => {
+    const userId = req.session.user.id;
+
+    try {
+        // Siparişleri al ve her siparişteki ürünleri de dahil et
+        const [orders] = await db.execute(
+            `SELECT o.id AS order_id, o.total_amount, o.status, o.order_date, oi.quantity, p.name AS product_name, p.price, p.image_url
+            FROM orders o
+            JOIN order_items oi ON o.id = oi.order_id
+            JOIN products p ON oi.product_id = p.id
+            WHERE o.user_id = ?
+            ORDER BY o.order_date DESC`,
+            [userId]
+        );
+
+        // Siparişlerin her birini gruplamak
+        const groupedOrders = orders.reduce((acc, order) => {
+            if (!acc[order.order_id]) {
+                acc[order.order_id] = {
+                    id: order.order_id,
+                    total_amount: order.total_amount,
+                    status: order.status,
+                    order_date: order.order_date,
+                    items: []
+                };
+            }
+            acc[order.order_id].items.push({
+                product_name: order.product_name,
+                price: order.price,
+                quantity: order.quantity,
+                image_url: order.image_url
+            });
+            return acc;
+        }, {});
+
+        // Siparişleri array'e çevir
+        const ordersList = Object.values(groupedOrders);
+
+        res.render('order-history', { orders: ordersList });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Sipariş geçmişi görüntülenirken bir hata oluştu.');
+    }
+});
+
+
 
 module.exports = router;

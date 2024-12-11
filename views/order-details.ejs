@@ -12,6 +12,7 @@
     <p><strong>Sipariş Durumu:</strong> <%= order.status %></p>
     <p><strong>Toplam Tutar:</strong> <%= order.total_amount %> TL</p>
     <p><strong>Adres:</strong> <%= order.address %></p>
+
     <!-- Kargo durumu kontrolü ve görünürlüğü -->
     <% if (order.shipping_status) { %>
         <p><strong>Kargo Durumu:</strong> <%= order.shipping_status %></p>
@@ -26,7 +27,6 @@
                 <p><%= item.product_name %> - <%= item.quantity %> x <%= item.price %> TL</p>
             </li>
         <% }); %>
-        
     </ul>
 
     <!-- Kargo Durumu Güncelleme Formu -->
