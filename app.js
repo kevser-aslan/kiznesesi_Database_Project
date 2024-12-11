@@ -54,6 +54,7 @@ const homeRoutes = require('./routes/homeRoutes');  // Ana sayfa rotası
 const productsRoutes = require('./routes/productsRoutes');  // Ürünler rotası
 const cartRoutes = require('./routes/cartRoutes');  // Sepet rotası
 const userRoutes = require('./routes/userRoutes');  // Kullanıcı işlemleri rotası
+const adminRoutes = require('./routes/adminRoutes');  // admin  işlemleri rotası
 const contactRoutes = require('./routes/contactRoutes');  // İletişim rotasını dahil ediyoruz
 const aboutRoutes = require('./routes/aboutRoutes');  // About rotasını dahil ediyoruz
 
@@ -66,6 +67,7 @@ app.use('/products', productsRoutes);  // Ürünler
 
 app.use('/cart', cartRoutes);  // Sepet
 app.use('/user', userRoutes);  // Kullanıcı
+app.use('/admin', adminRoutes);  // admin
 app.use('/contact', contactRoutes);  // İletişim sayfası rotası
 app.use('/about', aboutRoutes);  // About sayfası rotası
 // 404 Hata Sayfası

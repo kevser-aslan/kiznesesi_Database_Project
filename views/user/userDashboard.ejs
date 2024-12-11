@@ -1,39 +1,23 @@
+<!-- views/user/userDashboard.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Kullanıcı Dashboard</title>
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/user/user-dashboard">User Dashboard</a></li>
-                <li><a href="/user/account-settings">Account Settings</a></li>
-                <li><a href="/user/logout">Logout</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <h1>Welcome, <%= user.name %>!</h1>
-        <p>Email: <%= user.email %></p>
-        <p>Phone Number: <%= user.phone_number %></p>
-        <p>Address: <%= user.address %></p>
-        <p>Role: <%= user.role %></p>
-
-        <h2>Your Orders</h2>
-        <p><a href="/user/orders">View your orders</a></p>
-
-        <h2>Account Settings</h2>
-        <p><a href="/user/account-settings">Update your account details</a></p>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 E-Commerce</p>
-    </footer>
+    <h1>Hoşgeldiniz, <%= user.name %>!</h1>
+    <h2>Ürünler</h2>
+    <div>
+        <% products.forEach(function(product) { %>
+            <div>
+                <h3><%= product.name %></h3>
+                <p><%= product.description %></p>
+                <p>Fiyat: <%= product.price %> TL</p>
+                <img src="<%= product.image_url %>" alt="<%= product.name %>" width="100">
+            </div>
+        <% }); %>
+    </div>
 </body>
 </html>

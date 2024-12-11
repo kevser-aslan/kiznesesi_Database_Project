@@ -72,9 +72,16 @@ router.post('/signup', async (req, res) => {
 });
 
 // Kullanıcı Dashboard
-router.get('/user-dashboard', requireLogin, (req, res) => {
-    res.render('user/userDashboard', { user: req.session.user });
+router.get('/user-dashboard', requireLogin, async (req, res) => {
+    try {
+      const [products] = await db.execute('SELECT * FROM products');
+      res.render('user/userDashboard', { user: req.session.user, products });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Ürünler alınırken bir hata oluştu.');
+    }
   });
+  
 
 
   // Admin Dashboard
