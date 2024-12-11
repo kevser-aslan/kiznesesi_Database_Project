@@ -94,4 +94,11 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Sepeti boşaltma işlemi
+router.post('/clear', (req, res) => {
+    req.session.cart = [];  // Sepetteki ürünleri sıfırlıyoruz
+    res.redirect('/cart');  // Sepet sayfasına yönlendiriyoruz
+  });
+  
+
 module.exports = router;
