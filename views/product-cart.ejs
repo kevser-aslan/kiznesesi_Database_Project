@@ -20,6 +20,7 @@
                             <label for="quantity">Miktar:</label>
                             <input type="number" name="quantity" value="<%= item.quantity %>" min="1" required />
                             <button type="submit">Güncelle</button>
+                            
                         </form>
                         <form action="/cart/remove/<%= item.id %>" method="POST">
                             <button type="submit">Sepetten Çıkar</button>
