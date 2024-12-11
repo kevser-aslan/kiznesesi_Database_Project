@@ -1,27 +1,35 @@
+<!-- views/product-cart.ejs -->
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sepetim</title>
-  <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sepet</title>
 </head>
-<body class="page page-cart">
-  <header class="header">
-    <%- include('partials/header') %>
-  </header>
-  <main class="main-content cart-content">
-    <section class="cart-section">
-      <h1 class="cart-title">Sepetim</h1>
-      <ul class="cart-list">
-        <li class="cart-item">Ürünlerinizi burada görüntüleyin.</li>
-        <li class="cart-item">Miktarı düzenleyin veya ürünü kaldırın.</li>
-        <li class="cart-item">Satın alma işlemini tamamlayın.</li>
-      </ul>
-    </section>
-  </main>
-  <footer class="footer">
-    <%- include('partials/footer') %>
-  </footer>
+<body>
+    <h1>Sepetiniz</h1>
+    <div>
+        <% if (cartItems.length === 0) { %>
+            <p>Sepetinizde ürün yok.</p>
+        <% } else { %>
+            <ul>
+                <% cartItems.forEach(function(item) { %>
+                    <li>
+                        <p><%= item.name %> - <%= item.price %> TL</p>
+                        <form action="/cart/update/<%= item.id %>" method="POST">
+                            <label for="quantity">Miktar:</label>
+                            <input type="number" name="quantity" value="<%= item.quantity %>" min="1" required />
+                            <button type="submit">Güncelle</button>
+                        </form>
+                        <form action="/cart/remove/<%= item.id %>" method="POST">
+                            <button type="submit">Sepetten Çıkar</button>
+                        </form>
+                    </li>
+                <% }); %>
+            </ul>
+            <h3>Toplam Tutar: <%= totalAmount %> TL</h3>
+            <a href="/checkout">Ödeme Sayfasına Git</a>
+        <% } %>
+    </div>
 </body>
 </html>

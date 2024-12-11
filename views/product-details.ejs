@@ -10,21 +10,47 @@
   <%- include('partials/header') %>
 
   <main class="main-content">
-    <div class="product-details-container">
-        <div class="product-image">
-          <img src="<%= product.image %>" alt="<%= product.name %>" class="product-img">
-        </div>
-      
-        <div class="product-info">
-          <h1 class="product-title"><%= product.name %></h1>
-          <p class="product-description"><%= product.description %></p>
-          <p class="product-price">Fiyat: <%= product.price %> TL</p>
-          <a href="/cart" class="btn-add-to-cart">Sepete Ekle</a>
-        </div>
-      </div>
-      
-      
-      
+    <h1><%= product.name %></h1>
+    <img src="<%= product.image %>" alt="<%= product.name %>" width="300">
+    <p><%= product.description %></p>
+    <p>Fiyat: <%= product.price %> ₺</p>
+
+    <h2>Yorumlar</h2>
+    <% if (reviews.length > 0) { %>
+      <ul>
+        <% reviews.forEach(review => { %>
+          <li><strong><%= review.username %></strong> (<%= review.rating %> puan): <%= review.comment %></li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <p>Henüz yorum yapılmamış.</p>
+    <% } %>
+
+    <h3>Yorum Ekle</h3>
+    <form action="/products/reviews/add" method="POST">
+      <input type="hidden" name="productId" value="<%= product.id %>">
+      <label for="rating">Puan:</label>
+      <select name="rating" id="rating" required>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+      <br>
+      <label for="comment">Yorum:</label><br>
+      <textarea name="comment" id="comment" required></textarea><br>
+      <button type="submit">Yorumu Gönder</button>
+    </form>
+
+    <!-- Sepete Ekleme Formu -->
+    <h3>Sepete Ekle</h3>
+    <form action="/products/<%= product.id %>/add-to-cart" method="POST">
+      <label for="quantity">Miktar:</label>
+      <input type="number" name="quantity" id="quantity" value="1" min="1" required>
+      <button type="submit">Sepete Ekle</button>
+    </form>
+
   </main>
 
   <%- include('partials/footer') %>
