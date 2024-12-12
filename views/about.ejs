@@ -4,12 +4,83 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hakkımızda</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+
+    .page-about {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .header {
+      background-color: #e91e63;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .about-section {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .about-title {
+      font-size: 36px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .about-description {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 40px;
+    }
+
+    .about-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .about-item {
+      font-size: 20px;
+      color: #e91e63;
+      margin-bottom: 15px;
+      transition: color 0.3s ease;
+    }
+
+    .about-item:hover {
+      color: #c2185b;
+      cursor: pointer;
+    }
+
+    .footer {
+      background-color: #f8f0f9;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+  </style>
 </head>
 <body class="page page-about">
-  <header class="header">
+ 
     <%- include('partials/header') %>
-  </header>
+  
   <main class="main-content about-content">
     <section class="about-section">
       <h1 class="about-title">Hakkımızda</h1>

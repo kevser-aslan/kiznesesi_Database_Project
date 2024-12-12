@@ -1,41 +1,227 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kullanıcı Dashboard</title>
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Genel Sayfa Ayarları */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f0f9;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header Stilleri */
+header {
+  background-color: #e91e63;
+  padding: 15px 0;
+  text-align: center;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+header a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 15px;
+  font-size: 18px;
+}
+
+header a:hover {
+  text-decoration: underline;
+}
+
+/* Kullanıcı Dashboard Ana Alanı */
+.main-dashboard {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Navigasyon Menü */
+#user-nav {
+  background-color: #fff;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#user-nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+#user-nav li {
+  padding: 10px 20px;
+}
+
+#user-nav a {
+  text-decoration: none;
+  color: #e91e63;
+  font-weight: bold;
+}
+
+#user-nav a:hover {
+  color: #d81b60;
+}
+
+/* Kullanıcı Hoşgeldin Mesajı */
+.user-greeting {
+  text-align: center;
+  margin-top: 40px;
+}
+
+#greeting-title {
+  font-size: 36px;
+  color: #e91e63;
+  font-weight: bold;
+}
+
+/* Ürünler Listesi */
+#product-heading {
+  color: #333;
+  font-size: 28px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+/* Ürün Kartları */
+.products-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.product-card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 220px;
+}
+
+.product-card a {
+  text-decoration: none;
+}
+
+.product-name {
+  color: #e91e63;
+  font-size: 20px;
+}
+
+.product-description {
+  font-size: 16px;
+  color: #333;
+}
+
+.product-price {
+  font-size: 16px;
+  color: #e91e63;
+  font-weight: bold;
+}
+
+.product-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+/* Footer Stilleri */
+footer {
+  background-color: #f8f0f9;
+  padding: 20px 0;
+  text-align: center;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: auto;
+}
+
+footer .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+footer .footer-links {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+footer .footer-links li {
+  margin-right: 15px;
+}
+
+footer .footer-links a {
+  text-decoration: none;
+  color: #e91e63;
+  font-weight: bold;
+}
+
+footer .footer-links a:hover {
+  color: #d81b60;
+}
+
+    </style>
 </head>
-<body>
-   
-    <nav>
-        <ul>
-            <li><a href="/cart">Sepet</a></li> <!-- Sepet linki -->
-            <li><a href="/profile">Profil</a></li> <!-- Profil linki -->
-            <li><a href="/cart/order-history">Geçmiş Siparişler</a></li> <!-- Geçmiş siparişler linki -->
-            <li><a href="/logout">Çıkış Yap</a></li> <!-- Çıkış linki -->
-         
-                <li><a href="/support/contact">İletişim Formu</a> - Adminle iletişime geçmek için form doldurma sayfası.</li>
-                <li><a href="/support/messages">Mesajlarım</a> - Gönderilen mesajlar ve admin yanıtlarını görüntüleme sayfası.</li>
-           
-            
+<body class="page-dashboard">
+
+  <!-- Header'ı dahil ediyoruz -->
+  <%- include('../partials/header.ejs') %>
+
+  <%- include('../partials/dashboard') %>
+  
+
+  <main class="main-dashboard">
+    <nav id="user-nav">
+        <ul class="nav-list">
+            <li><a href="/cart" id="nav-cart">Sepet</a></li>
+            <li><a href="/profile" id="nav-profile">Profil</a></li>
+            <li><a href="/cart/order-history" id="nav-order-history">Geçmiş Siparişler</a></li>
+            <li><a href="/logout" id="nav-logout">Çıkış Yap</a></li>
+            <li><a href="/support/contact" id="nav-contact-form">İletişim Formu</a></li>
+            <li><a href="/support/messages" id="nav-messages">Mesajlarım</a></li>
         </ul>
-      </nav>
-    
-    <h1 class="userDashboardH1">Hoşgeldiniz, <%= user.name %>!</h1>
-    <h2>Ürünler</h2>
-    <div>
-        <% products.forEach(function(product) { %>
-            <div>
-                <!-- Ürünün detay sayfasına yönlendiren link -->
-                <a href="/products/<%= product.id %>">
-                    <h3><%= product.name %></h3>
-                    <p><%= product.description %></p>
-                    <p>Fiyat: <%= product.price %> TL</p>
-                    <img src="<%= product.image_url %>" alt="<%= product.name %>" width="100">
-                </a>
-            </div>
-        <% }); %>
-    </div>
+    </nav>
+
+    <section class="user-greeting">
+        <h1 id="greeting-title">Hoşgeldiniz, <%= user.name %>!</h1>
+    </section>
+
+    <section class="product-list">
+        <h2 id="product-heading">Ürünler</h2>
+        <div class="products-container">
+            <% products.forEach(function(product) { %>
+                <div class="product-card">
+                    <a href="/products/<%= product.id %>" class="product-link">
+                        <h3 class="product-name"><%= product.name %></h3>
+                        <p class="product-description"><%= product.description %></p>
+                        <p class="product-price">Fiyat: <%= product.price %> TL</p>
+                        <img src="<%= product.image_url %>" alt="<%= product.name %>" class="product-image" width="100">
+                    </a>
+                </div>
+            <% }); %>
+        </div>
+    </section>
+  </main>
+
+  <!-- Footer'ı dahil ediyoruz -->
+  <%- include('../partials/footer') %>
+
 </body>
 </html>

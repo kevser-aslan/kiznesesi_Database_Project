@@ -1,43 +1,245 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ürün Detayları</title>
   <link rel="stylesheet" href="/styles/style.css">
   <style>
-    /* Modal için stil */
-    .modal {
+    /* Genel Stil ve Ortalamalar */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .main-content {
+      width: 80%;
+      margin: 0 auto;
+      padding: 30px 0;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Başlıklar */
+    #product-name {
+      font-size: 36px;
+      font-weight: 600;
+      color: #e91e63;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #product-description {
+      font-size: 18px;
+      color: #555;
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    #product-price {
+      font-size: 24px;
+      color: #e91e63;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    /* Ürün Görseli */
+    #product-image {
+      margin-top: 20px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      cursor: pointer;
+      transition: transform 0.3s ease-in-out;
+      border-radius: 8px;
+    }
+
+    #product-image:hover {
+      transform: scale(1.05);
+    }
+
+    /* Modal */
+    #imageModal {
       display: none;
       position: fixed;
-      z-index: 1;
+      z-index: 1000;
       left: 0;
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 0.7);
       overflow: auto;
     }
-    .modal-content {
+
+    #modalImage {
       margin: 10% auto;
       display: block;
       width: 80%;
       max-width: 700px;
+      border-radius: 8px;
     }
-    .close {
+
+    #closeModal {
       position: absolute;
       top: 15px;
       right: 25px;
-      color: #f1f1f1;
-      font-size: 35px;
+      color: #fff;
+      font-size: 40px;
       font-weight: bold;
       cursor: pointer;
     }
-    .close:hover,
-    .close:focus {
-      color: #bbb;
-      text-decoration: none;
+
+  /* Yorumlar */
+#reviews-section {
+  margin-top: 40px;
+}
+
+#reviews-title {
+  font-size: 28px;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#review-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Yorumlar Kutusu - Scroll Ekleme */
+#review-list {
+  max-height: 400px; /* Yüksekliği ihtiyaca göre ayarlayabilirsiniz */
+  overflow-y: auto; /* Yorumlar uzun olduğunda scroll ekler */
+  padding-right: 15px; /* Scroll çubuğunun görünmesi için sağda boşluk bırakıldı */
+}
+
+/* Yorum Item'ı */
+.review-item {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.review-item strong {
+  color: #e91e63;
+}
+
+.review-item p {
+  color: #555;
+  font-size: 16px;
+}
+
+.vote-buttons {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.vote-buttons button {
+  background-color: #e91e63;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  cursor: pointer;
+  margin: 0 5px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.vote-buttons button:hover {
+  background-color: #d81b60;
+}
+
+    /* Yorum Ekleme Formu */
+    #add-review-form {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #f8f0f9;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    #add-review-form label {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    #add-review-form select,
+    #add-review-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    #add-review-form button {
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      padding: 10px 20px;
       cursor: pointer;
+      font-weight: bold;
+      border-radius: 5px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #add-review-form button:hover {
+      background-color: #d81b60;
+    }
+
+    /* Sepete Ekleme Formu */
+    #add-to-cart-form {
+      margin-top: 40px;
+      padding: 20px;
+      background-color: #f8f0f9;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    #add-to-cart-form label {
+      font-size: 16px;
+      color: #333;
+    }
+
+    #add-to-cart-form input[type="number"] {
+      width: 100px;
+      padding: 8px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    #add-to-cart-form button {
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 5px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #add-to-cart-form button:hover {
+      background-color: #d81b60;
     }
   </style>
 </head>
@@ -45,80 +247,109 @@
   <%- include('partials/header') %>
 
   <main class="main-content">
-    <h1><%= product.name %></h1>
+    <h1 id="product-name"><%= product.name %></h1>
     
     <!-- Ürün görselini tıklanabilir hale getirdik -->
-    <img src="<%= product.image_url %>" alt="<%= product.name %>" width="300" id="productImage">
+    <img src="<%= product.image_url %>" alt="<%= product.name %>" width="300" id="product-image">
 
-    
     <!-- Modal yapısı -->
     <div id="imageModal" class="modal">
       <span class="close" id="closeModal">&times;</span>
       <img class="modal-content" id="modalImage">
     </div>
 
-    <p><%= product.description %></p>
-    <p>Fiyat: <%= product.price %> ₺</p>
+    <p id="product-description"><%= product.description %></p>
+    <p id="product-price">Fiyat: <%= product.price %> ₺</p>
 
-    <h2>Yorumlar</h2>
-    <% if (reviews.length > 0) { %>
-      <ul>
-        <% reviews.forEach(review => { %>
-          <li><strong><%= review.username %></strong> (<%= review.rating %> puan): <%= review.comment %></li>
-        <% }) %>
-      </ul>
-    <% } else { %>
-      <p>Henüz yorum yapılmamış.</p>
-    <% } %>
+    <section id="reviews-section">
+      <h2 id="reviews-title">Yorumlar</h2>
+      
+      <% if (reviews.length > 0) { %>
+        <ul id="review-list">
+          <% reviews.forEach(review => { %>
+            <li class="review-item">
+              <strong><%= review.username %></strong> (<%= review.rating %> puan)
+              <p><%= review.comment %></p>
+              <p>Faydalı Oylar: <%= review.helpful_votes || 0 %></p>
+              <div class="vote-buttons">
+                <form action="/products/reviews/<%= review.id %>/vote" method="POST" style="display: inline;">
+                  <input type="hidden" name="vote" value="1">
+                  <button type="submit">Beğen</button>
+                </form>
+                <form action="/products/reviews/<%= review.id %>/vote" method="POST" style="display: inline;">
+                  <input type="hidden" name="vote" value="-1">
+                  <button type="submit">Beğenme</button>
+                </form>
+              </div>
 
-    <h3>Yorum Ekle</h3>
-    <form action="/products/reviews/add" method="POST">
-      <input type="hidden" name="productId" value="<%= product.id %>">
-      <label for="rating">Puan:</label>
-      <select name="rating" id="rating" required>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-      <br>
-      <label for="comment">Yorum:</label><br>
-      <textarea name="comment" id="comment" required></textarea><br>
-      <button type="submit">Yorumu Gönder</button>
-    </form>
+              <% if (review.replies && review.replies.length > 0) { %>
+                <ul>
+                  <% review.replies.forEach(reply => { %>
+                    <li><strong><%= reply.username %>:</strong> <%= reply.reply_text %></li>
+                  <% }) %>
+                </ul>
+              <% } %>
 
-    <!-- Sepete Ekleme Formu -->
-    <h3>Sepete Ekle</h3>
-    <form action="/products/<%= product.id %>/add-to-cart" method="POST">
-      <label for="quantity">Miktar:</label>
-      <input type="number" name="quantity" id="quantity" value="1" min="1" required>
-      <button type="submit">Sepete Ekle</button>
-    </form>
+              <!-- Yanıt Formu -->
+              <form action="/products/reviews/reply" method="POST">
+                <input type="hidden" name="reviewId" value="<%= review.id %>">
+                <label for="replyText">Yanıt:</label>
+                <textarea name="replyText" id="replyText" required></textarea><br>
+                <button type="submit">Yanıt Gönder</button>
+              </form>
+            </li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p>Henüz yorum yapılmamış.</p>
+      <% } %>
 
+      <!-- Yorum Ekleme -->
+      <h3>Yorum Ekle</h3>
+      <form action="/products/reviews/add" method="POST" id="add-review-form">
+        <input type="hidden" name="productId" value="<%= product.id %>">
+        <label for="rating">Puan:</label>
+        <select name="rating" id="rating" required>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <label for="comment">Yorum:</label><br>
+        <textarea name="comment" id="comment" required></textarea><br>
+        <button type="submit">Yorumu Gönder</button>
+      </form>
+    </section>
+
+    <!-- Sepete Ekleme -->
+    <section id="add-to-cart-form">
+      <h3>Sepete Ekle</h3>
+      <form action="/products/<%= product.id %>/add-to-cart" method="POST">
+        <label for="quantity">Miktar:</label>
+        <input type="number" name="quantity" id="quantity" value="1" min="1" required>
+        <button type="submit">Sepete Ekle</button>
+      </form>
+    </section>
   </main>
 
   <%- include('partials/footer') %>
 
   <script>
-    // Modal açma işlevi
     var modal = document.getElementById("imageModal");
-    var img = document.getElementById("productImage");
+    var img = document.getElementById("product-image");
     var modalImg = document.getElementById("modalImage");
     var span = document.getElementById("closeModal");
 
-    // Görsel tıklandığında modalde göster
     img.onclick = function() {
       modal.style.display = "block";
       modalImg.src = img.src;
     }
 
-    // Modalin dışına tıklanırsa kapatma
     span.onclick = function() {
       modal.style.display = "none";
     }
 
-    // Modalin dışına tıklanırsa kapatma
     window.onclick = function(event) {
       if (event.target == modal) {
         modal.style.display = "none";
