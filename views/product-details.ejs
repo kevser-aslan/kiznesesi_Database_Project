@@ -349,7 +349,13 @@
     <!-- Yorumlar -->
     <section id="reviews-section">
       <h2 id="reviews-title">Yorumlar</h2>
+      <section id="review-stats">
+        <h3>Yorum İstatistikleri</h3>
+        <p>Toplam Yorum Sayısı: <span id="total-reviews"><%= totalReviews %></span></p>
+        <p>Ortalama Puan: <span id="average-rating"><%= averageRating %></span></p>
 
+      </section>
+      
       <!-- Yorumları sıralama menüsü -->
       <form method="GET" action="/products/<%= product.id %>">
         <label for="sort">Yorumları Sırala:</label>
@@ -399,6 +405,8 @@
       <% } else { %>
         <p>Henüz yorum yapılmamış.</p>
       <% } %>
+      
+      
 
       <!-- Yorum Ekleme -->
       <h3>Yorum Ekle</h3>
@@ -457,7 +465,7 @@
       featureIdInput.value = selectedFeatureId;
       featureNameInput.value = selectedFeatureName;
 
-      console.log(`Seçilen Özellik ID: ${selectedFeatureId}, Özellik Adı: ${selectedFeatureName}`);
+     
     });
   });
 
@@ -505,8 +513,8 @@
       event.preventDefault(); // Formun gönderilmesini engelle
     }
 
-    // Eğer özellik yoksa null değerler ile form gönderilsin
-    console.log(`Form gönderiliyor: featureId = ${featureIdInput.value}, featureName = ${featureNameInput.value}`);
+    
+    
   });
 
   </script>

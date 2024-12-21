@@ -61,4 +61,40 @@ router.post('/update', async (req, res) => {
     }
 });
 
+
+// Şifre güncelleme route'u
+router.post('/update-password', async (req, res) => {
+  const userId = req.session.user.id; // Oturumdaki kullanıcı ID'sini al
+  const { current_password, new_password, confirm_password } = req.body;
+
+  try {
+      // Şifrelerin eşleştiğini kontrol et
+      if (new_password !== confirm_password) {
+          return res.status(400).send('Yeni şifre ve onay şifresi eşleşmiyor.');
+      }
+
+      // Mevcut şifreyi veritabanından al
+      const [[user]] = await db.execute('SELECT password FROM users WHERE id = ?', [userId]);
+      if (!user) {
+          return res.status(404).send('Kullanıcı bulunamadı.');
+      }
+
+      // Mevcut şifreyi doğrula
+      const passwordMatch = await bcrypt.compare(current_password, user.password);
+      if (!passwordMatch) {
+          return res.status(400).send('Mevcut şifre yanlış.');
+      }
+
+      // Yeni şifreyi hashle ve güncelle
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(new_password, saltRounds);
+      await db.execute('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, userId]);
+
+      res.redirect('/profile'); // Güncelleme başarılıysa profil sayfasına yönlendir
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Şifre güncellenirken bir hata oluştu.');
+  }
+});
+
 module.exports = router;
