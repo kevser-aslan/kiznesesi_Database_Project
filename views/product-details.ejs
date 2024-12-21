@@ -421,7 +421,7 @@
     <!-- Sepete Ekle -->
     <section id="add-to-cart-section">
       <h2>Sepete Ekle</h2>
-      <form action="/cart/add" method="POST" id="add-to-cart-form">
+      <form action="/cart/<%= product.id %>/add-to-cart2" method="POST" id="add-to-cart-form">
         <input type="hidden" name="productId" value="<%= product.id %>">
         <label for="quantity">Adet:</label>
         <input type="number" name="quantity" id="quantity" value="1" min="1" required><br>
@@ -432,33 +432,36 @@
   </main>
 
   <script>
-    // Özellik butonlarına tıklama efekti ekleyelim
-const featureButtons = document.querySelectorAll('.feature-button');
-let selectedFeatureId = null;
-let selectedFeatureName = '';
-// Her butona tıklanabilirlik ekleyelim
-featureButtons.forEach(button => {
+  const featureButtons = document.querySelectorAll('.feature-button');
+  const featureIdInput = document.getElementById('selected-feature-id');
+  const featureNameInput = document.getElementById('selected-feature-name');
+
+  // Varsayılan olarak ID ve Name bilgilerini "null" ve boş yap
+  featureIdInput.value = "null";
+  featureNameInput.value = "";
+
+  // Özellik butonlarına tıklama efekti ekleyelim
+  featureButtons.forEach(button => {
     button.addEventListener('click', function() {
-        // Daha önce seçili olan butonu eski renginden çıkar
-        featureButtons.forEach(btn => {
-            btn.classList.remove('selected');
-        });
+      // Daha önce seçili olan butonu eski renginden çıkar
+      featureButtons.forEach(btn => btn.classList.remove('selected'));
 
-        // Yeni tıklanan butonu seçili yap
-        this.classList.add('selected');
+      // Yeni tıklanan butonu seçili yap
+      this.classList.add('selected');
 
-        // Seçilen özelliğin ID ve adı bilgilerini al
-        selectedFeatureId = this.getAttribute('data-feature-id');
-        selectedFeatureName = this.getAttribute('data-feature-name');
+      // Seçilen özelliğin ID ve adı bilgilerini al
+      const selectedFeatureId = this.getAttribute('data-feature-id');
+      const selectedFeatureName = this.getAttribute('data-feature-name');
 
-        // Konsola yazdır
-        console.log(`Seçilen Özellik ID: ${selectedFeatureId}, Özellik Adı: ${selectedFeatureName}`);
-        
-        // Formdaki hidden input'lara bilgileri güncelle
-        document.getElementById('selected-feature-id').value = selectedFeatureId;
-        document.getElementById('selected-feature-name').value = selectedFeatureName;
+      // Formdaki hidden input'lara bilgileri güncelle
+      featureIdInput.value = selectedFeatureId;
+      featureNameInput.value = selectedFeatureName;
+
+      console.log(`Seçilen Özellik ID: ${selectedFeatureId}, Özellik Adı: ${selectedFeatureName}`);
     });
-});
+  });
+
+
     // Ürün görseli modal'ını gösterme ve kapama fonksiyonları
     var modal = document.getElementById('imageModal');
     var modalImg = document.getElementById("modalImage");
@@ -492,15 +495,19 @@ featureButtons.forEach(button => {
 
 
 
-document.querySelector('#add-to-cart-form').addEventListener('submit', function(event) {
-  const selectedFeatureId = document.getElementById('selected-feature-id').value;
-  
-  // Eğer feature_id seçilmemişse formu göndermeyi engelle
-  if (!selectedFeatureId || selectedFeatureId === '') {
-    alert('Lütfen bir özellik seçin.');
-    event.preventDefault(); // Formun gönderilmesini engelle
-  }
-});
+  // Form gönderim kontrolü
+  document.querySelector('#add-to-cart-form').addEventListener('submit', function(event) {
+    const selectedFeatureId = featureIdInput.value;
+
+    // Eğer özellikler varsa ve hiçbir özellik seçilmemişse uyarı ver
+    if (featureButtons.length > 0 && (!selectedFeatureId || selectedFeatureId === "null")) {
+      alert('Lütfen bir özellik seçin.');
+      event.preventDefault(); // Formun gönderilmesini engelle
+    }
+
+    // Eğer özellik yoksa null değerler ile form gönderilsin
+    console.log(`Form gönderiliyor: featureId = ${featureIdInput.value}, featureName = ${featureNameInput.value}`);
+  });
 
   </script>
 

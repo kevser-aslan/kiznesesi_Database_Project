@@ -138,6 +138,9 @@
             <li class="cart-item">
               <div class="item-details">
                 <p class="item-name"><%= item.name %></p>
+                <% if (item.feature_name) { %>
+                  <p class="item-feature">Özellik: <%= item.feature_name %></p>
+                <% } %>
                 <p class="item-price"><%= item.price %> TL</p>
               </div>
               
@@ -153,6 +156,7 @@
             </li>
           <% }); %>
         </ul>
+        
         
         <div class="total-amount">
           <h3>Toplam Tutar: <%= totalAmount %> TL</h3>

@@ -5,7 +5,44 @@ const db = require('../db');  // Veritabanı bağlantısı
 
 
 
-
+router.post('/:id/add-to-cart2', async (req, res) => {
+    const productId = req.params.id;
+    const quantity = parseInt(req.body.quantity) || 1; // Miktar varsayılan olarak 1
+    let featureId = req.body.featureId || null; // Eğer featureId yoksa null olarak ayarla
+    let featureName = req.body.featureName || null; // Eğer featureName yoksa null olarak ayarla
+  
+    console.log("featureId: " + featureId);
+    console.log("featureName: " + featureName);
+  
+    const userId = req.session.user.id; // Kullanıcı ID'si (oturumdan alınacak)
+  
+    try {
+      // Ürün ve özellik bilgisi ile sepetteki varlığı kontrol et
+      const [existingCartItem] = await db.execute(
+        'SELECT * FROM cart WHERE user_id = ? AND product_id = ? AND feature_id = ?',
+        [userId, productId, featureId]
+      );
+  
+      if (existingCartItem.length > 0) {
+        // Eğer ürün ve özellik zaten sepette varsa, miktarı güncelle
+        await db.execute(
+          'UPDATE cart SET quantity = quantity + ?, feature_name = ? WHERE user_id = ? AND product_id = ? AND feature_id = ?',
+          [quantity, featureName, userId, productId, featureId]
+        );
+      } else {
+        // Ürün ve özellik sepette yoksa yeni bir kayıt ekle
+        await db.execute(
+          'INSERT INTO cart (user_id, product_id, feature_id, feature_name, quantity) VALUES (?, ?, ?, ?, ?)',
+          [userId, productId, featureId, featureName, quantity]
+        );
+      }
+  
+      res.redirect('/cart'); // Sepet sayfasına yönlendir
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Sepete ürün eklenirken bir hata oluştu.');
+    }
+  });
 
 
 
@@ -110,9 +147,9 @@ router.get('/', async (req, res) => {
     const userId = req.session.user.id; // Kullanıcı id'si (oturumdan alınacak)
 
     try {
-        // Sepetteki ürünleri al
+        // Sepetteki ürünleri al (özellik bilgisiyle birlikte)
         const [cartItems] = await db.execute(
-            `SELECT cart.id, products.name, products.price, cart.quantity 
+            `SELECT cart.id, products.name, products.price, cart.quantity, cart.feature_name 
             FROM cart 
             JOIN products ON cart.product_id = products.id
             WHERE cart.user_id = ?`,
