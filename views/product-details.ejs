@@ -349,7 +349,13 @@
     <!-- Yorumlar -->
     <section id="reviews-section">
       <h2 id="reviews-title">Yorumlar</h2>
+      <section id="review-stats">
+        <h3>Yorum İstatistikleri</h3>
+        <p>Toplam Yorum Sayısı: <span id="total-reviews"><%= totalReviews %></span></p>
+        <p>Ortalama Puan: <span id="average-rating"><%= averageRating %></span></p>
 
+      </section>
+      
       <!-- Yorumları sıralama menüsü -->
       <form method="GET" action="/products/<%= product.id %>">
         <label for="sort">Yorumları Sırala:</label>
@@ -377,15 +383,13 @@
                   <button type="submit">Beğenme</button>
                 </form>
               </div>
-
-              <% if (review.replies && review.replies.length > 0) { %>
+      
+              <% if (review.reply_text) { %>
                 <ul>
-                  <% review.replies.forEach(reply => { %>
-                    <li><strong><%= reply.username %>:</strong> <%= reply.reply_text %></li>
-                  <% }) %>
+                  <li><strong><%= review.reply_user_id %>:</strong> <%= review.reply_text %></li>
                 </ul>
               <% } %>
-
+      
               <!-- Yanıt Formu -->
               <form action="/products/reviews/reply" method="POST">
                 <input type="hidden" name="reviewId" value="<%= review.id %>">
@@ -399,6 +403,7 @@
       <% } else { %>
         <p>Henüz yorum yapılmamış.</p>
       <% } %>
+      
 
       <!-- Yorum Ekleme -->
       <h3>Yorum Ekle</h3>
@@ -457,7 +462,7 @@
       featureIdInput.value = selectedFeatureId;
       featureNameInput.value = selectedFeatureName;
 
-      console.log(`Seçilen Özellik ID: ${selectedFeatureId}, Özellik Adı: ${selectedFeatureName}`);
+     
     });
   });
 
@@ -505,8 +510,8 @@
       event.preventDefault(); // Formun gönderilmesini engelle
     }
 
-    // Eğer özellik yoksa null değerler ile form gönderilsin
-    console.log(`Form gönderiliyor: featureId = ${featureIdInput.value}, featureName = ${featureNameInput.value}`);
+    
+    
   });
 
   </script>

@@ -111,6 +111,22 @@
             
             <button type="submit">Güncelle</button>
         </form>
+
+        <h2>Şifre Değiştir</h2>
+        <form action="/profile/update-password" method="POST">
+            <label for="current_password">Mevcut Şifre:</label>
+            <input type="password" id="current_password" name="current_password" required>
+        
+            <label for="new_password">Yeni Şifre:</label>
+            <input type="password" id="new_password" name="new_password" required>
+        
+            <label for="confirm_password">Yeni Şifreyi Onayla:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+        
+            <button type="submit">Şifreyi Güncelle</button>
+        </form>
+        
+
     </div>
     <%- include('../partials/footer') %>
 </body>

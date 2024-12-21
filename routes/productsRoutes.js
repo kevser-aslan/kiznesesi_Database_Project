@@ -46,42 +46,55 @@ router.get('/:id', async (req, res) => {
     const orderBy = getReviewSortOrder(sort);
 
     // Yorumları al
-    const [reviews] = await db.execute(
-      `SELECT reviews.*, users.name AS username,
-              (SELECT SUM(vote) FROM review_votes WHERE review_id = reviews.id) AS helpful_votes
-       FROM reviews
-       JOIN users ON reviews.user_id = users.id
-       WHERE product_id = ? 
-       ORDER BY ${orderBy}`,
+    // Yorumları ve yanıtları al
+const [reviews] = await db.execute(
+  `SELECT reviews.*, 
+          users.name AS username,
+          (SELECT SUM(vote) FROM review_votes WHERE review_id = reviews.id) AS helpful_votes,
+          replies.id AS reply_id, 
+          replies.reply_text, 
+          replies.user_id AS reply_user_id
+   FROM reviews
+   JOIN users ON reviews.user_id = users.id
+   LEFT JOIN comment_replies AS replies ON replies.review_id = reviews.id
+   WHERE reviews.product_id = ? 
+   ORDER BY ${orderBy}`,
+  [productId]
+);
+
+
+    // Ortalama puanı ve toplam yorum sayısını hesapla
+    const [reviewStats] = await db.execute(
+      `SELECT COUNT(*) AS totalReviews, 
+              COALESCE(AVG(rating), 0) AS averageRating
+       FROM reviews 
+       WHERE product_id = ?`,
       [productId]
     );
 
-    // Yanıtları al
-    const [replies] = await db.execute(
-      `SELECT comment_replies.*, users.name AS username 
-       FROM comment_replies 
-       JOIN users ON comment_replies.user_id = users.id`
-    );
+    // `averageRating` ve `totalReviews` değişkenlerini al
+    const { totalReviews, averageRating } = reviewStats[0];
 
-    // Yorumlar ile yanıtları birleştir
-    const reviewsWithReplies = reviews.map((review) => ({
-      ...review,
-      replies: replies.filter((reply) => reply.review_id === review.id),
-    }));
+   // Ortalama puanı düzgün şekilde kontrol et ve sayıya çevir
+const roundedAverageRating = averageRating !== null && averageRating !== undefined
+? parseFloat(averageRating).toFixed(1)
+: 0;
 
-    // Ürün ve yorumları EJS'ye gönder
+
+    // Şablonu render et
     res.render('product-details', {
-      product: product[0], // İlk ürün bilgisi
-      features,             // Ürün özelliklerini de ekliyoruz
-      reviews: reviewsWithReplies,
+      product: product[0],
+      features,
+      reviews,
       sort,
+      totalReviews,
+      averageRating: roundedAverageRating, // Yuvarlanmış puanı gönder
     });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Ürün detayları alınırken bir hata oluştu.');
+  } catch (err) {
+    console.error('Hata:', err);
+    res.status(500).send('Sunucu hatası');
   }
 });
-
 
 
 // Yorumlara yanıt ekleme
