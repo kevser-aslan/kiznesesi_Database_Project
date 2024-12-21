@@ -53,6 +53,29 @@ router.post('/remove/:id', async (req, res) => {
     }
 });
 
+
+// Sepeti boşaltma işlemi
+router.post('/clear', async (req, res) => {
+    const userId = req.session.user ? req.session.user.id : null; // Kullanıcı id'sini oturumdan al
+
+    if (!userId) {
+        // Eğer kullanıcı oturum açmamışsa hata gönder
+        return res.status(401).send('Lütfen önce giriş yapınız.');
+    }
+
+    try {
+        // Kullanıcının sepetindeki tüm ürünleri sil
+        await db.execute('DELETE FROM cart WHERE user_id = ?', [userId]);
+
+        // Başarı mesajı ve yönlendirme
+        res.redirect('/cart');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Sepeti boşaltırken bir hata oluştu.');
+    }
+});
+
+
 // Sepet Ürün Miktarını Güncelleme
 router.post('/update/:id', async (req, res) => {
     const cartItemId = req.params.id;

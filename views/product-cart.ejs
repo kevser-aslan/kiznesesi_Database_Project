@@ -157,6 +157,14 @@
         <div class="total-amount">
           <h3>Toplam Tutar: <%= totalAmount %> TL</h3>
           <a href="/cart/checkout" class="checkout-button">Ödeme Sayfasına Git</a>
+          <form action="/cart/clear" method="POST" style="display: inline-block; margin-left: 10px;">
+            <button type="submit" class="remove-button">Sepeti Boşalt</button>
+          </form>
+        </div>
+        
+        <div class="total-amount">
+          <h3>Toplam Tutar: <%= totalAmount %> TL</h3>
+          <a href="/cart/checkout" class="checkout-button">Ödeme Sayfasına Git</a>
         </div>
       <% } %>
     </div>
