@@ -2,6 +2,20 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');  // Veritabanı bağlantısını ekliyoruz
 
+// Yorumları sıralama parametresine göre sıralama
+function getReviewSortOrder(sort) {
+  switch (sort) {
+    case 'highest':
+      return 'rating DESC';  // Yüksek puanlı yorumlar
+    case 'helpful':
+      return '(SELECT SUM(vote) FROM review_votes WHERE review_id = reviews.id) DESC'; // En faydalı yorumlar
+    case 'newest':
+    default:
+      return 'created_at DESC'; // En yeni yorumlar
+  }
+}
+
+
 // Ürünler listesi sayfası
 router.get('/', async (req, res) => {
   try {
@@ -25,12 +39,8 @@ router.get('/:id', async (req, res) => {
       return res.status(404).send('Ürün bulunamadı');
     }
 
-    let orderBy = 'created_at DESC'; // Varsayılan: En yeni
-    if (sort === 'highest') {
-      orderBy = 'rating DESC';
-    } else if (sort === 'helpful') {
-      orderBy = '(SELECT SUM(vote) FROM review_votes WHERE review_id = reviews.id) DESC';
-    }
+    // Yorum sıralama mantığını belirle
+    const orderBy = getReviewSortOrder(sort);
 
     // Yorumları al
     const [reviews] = await db.execute(
@@ -38,7 +48,7 @@ router.get('/:id', async (req, res) => {
               (SELECT SUM(vote) FROM review_votes WHERE review_id = reviews.id) AS helpful_votes
        FROM reviews
        JOIN users ON reviews.user_id = users.id
-       WHERE product_id = ?
+       WHERE product_id = ? 
        ORDER BY ${orderBy}`,
       [productId]
     );

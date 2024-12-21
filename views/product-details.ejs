@@ -263,7 +263,17 @@
 
     <section id="reviews-section">
       <h2 id="reviews-title">Yorumlar</h2>
-      
+
+      <!-- Yorumları sıralama menüsü -->
+      <form method="GET" action="/products/<%= product.id %>">
+        <label for="sort">Yorumları Sırala:</label>
+        <select name="sort" id="sort" onchange="this.form.submit()">
+          <option value="newest" <%= sort === 'newest' ? 'selected' : '' %>>En Yeni</option>
+          <option value="highest" <%= sort === 'highest' ? 'selected' : '' %>>En Yüksek Puanlı</option>
+          <option value="helpful" <%= sort === 'helpful' ? 'selected' : '' %>>En Faydalı</option>
+        </select>
+      </form>
+
       <% if (reviews.length > 0) { %>
         <ul id="review-list">
           <% reviews.forEach(review => { %>
@@ -316,45 +326,41 @@
           <option value="4">4</option>
           <option value="5">5</option>
         </select>
-        <label for="comment">Yorum:</label><br>
+        <label for="comment">Yorum:</label>
         <textarea name="comment" id="comment" required></textarea><br>
-        <button type="submit">Yorumu Gönder</button>
+        <button type="submit">Yorum Gönder</button>
       </form>
     </section>
 
-    <!-- Sepete Ekleme -->
-    <section id="add-to-cart-form">
-      <h3>Sepete Ekle</h3>
-      <form action="/products/<%= product.id %>/add-to-cart" method="POST">
-        <label for="quantity">Miktar:</label>
-        <input type="number" name="quantity" id="quantity" value="1" min="1" required>
+    <!-- Sepete Ekle -->
+    <section id="add-to-cart-section">
+      <h2>Sepete Ekle</h2>
+      <form action="/cart/add" method="POST" id="add-to-cart-form">
+        <input type="hidden" name="productId" value="<%= product.id %>">
+        <label for="quantity">Adet:</label>
+        <input type="number" name="quantity" id="quantity" value="1" min="1" required><br>
         <button type="submit">Sepete Ekle</button>
       </form>
     </section>
   </main>
 
-  <%- include('partials/footer') %>
-
   <script>
-    var modal = document.getElementById("imageModal");
-    var img = document.getElementById("product-image");
+    // Ürün görseli modal'ını gösterme ve kapama fonksiyonları
+    var modal = document.getElementById('imageModal');
     var modalImg = document.getElementById("modalImage");
+    var img = document.getElementById("product-image");
     var span = document.getElementById("closeModal");
 
-    img.onclick = function() {
+    img.onclick = function(){
       modal.style.display = "block";
-      modalImg.src = img.src;
+      modalImg.src = this.src;
     }
 
     span.onclick = function() {
       modal.style.display = "none";
     }
-
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
   </script>
+
+  <%- include('partials/footer') %>
 </body>
 </html>
