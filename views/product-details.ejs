@@ -383,13 +383,15 @@
                   <button type="submit">Beğenme</button>
                 </form>
               </div>
-      
-              <% if (review.reply_text) { %>
+
+              <% if (review.replies && review.replies.length > 0) { %>
                 <ul>
-                  <li><strong><%= review.reply_user_id %>:</strong> <%= review.reply_text %></li>
+                  <% review.replies.forEach(reply => { %>
+                    <li><strong><%= reply.username %>:</strong> <%= reply.reply_text %></li>
+                  <% }) %>
                 </ul>
               <% } %>
-      
+
               <!-- Yanıt Formu -->
               <form action="/products/reviews/reply" method="POST">
                 <input type="hidden" name="reviewId" value="<%= review.id %>">
@@ -403,6 +405,7 @@
       <% } else { %>
         <p>Henüz yorum yapılmamış.</p>
       <% } %>
+      
       
 
       <!-- Yorum Ekleme -->

@@ -46,22 +46,33 @@ router.get('/:id', async (req, res) => {
     const orderBy = getReviewSortOrder(sort);
 
     // Yorumları al
-    // Yorumları ve yanıtları al
-const [reviews] = await db.execute(
-  `SELECT reviews.*, 
-          users.name AS username,
-          (SELECT SUM(vote) FROM review_votes WHERE review_id = reviews.id) AS helpful_votes,
-          replies.id AS reply_id, 
-          replies.reply_text, 
-          replies.user_id AS reply_user_id
-   FROM reviews
-   JOIN users ON reviews.user_id = users.id
-   LEFT JOIN comment_replies AS replies ON replies.review_id = reviews.id
-   WHERE reviews.product_id = ? 
-   ORDER BY ${orderBy}`,
-  [productId]
-);
+    const [reviews] = await db.execute(
+      `SELECT reviews.*, 
+              users.name AS username,
+              (SELECT SUM(vote) FROM review_votes WHERE review_id = reviews.id) AS helpful_votes
+       FROM reviews
+       JOIN users ON reviews.user_id = users.id
+       WHERE reviews.product_id = ? 
+       ORDER BY reviews.created_at DESC`,
+      [productId]
+    );
 
+    // Yanıtları al
+    const [replies] = await db.execute(
+      `SELECT comment_replies.*, users.name AS username 
+       FROM comment_replies 
+       JOIN users ON comment_replies.user_id = users.id`
+    );
+
+    // Yorumlar ile yanıtları birleştir
+    const reviewsWithReplies = reviews.map((review) => {
+      // Yorumun altındaki yanıtları filtrele
+      const reviewReplies = replies.filter((reply) => reply.review_id === review.id);
+      return {
+        ...review,
+        replies: reviewReplies, // İlgili yanıtları ekle
+      };
+    });
 
     // Ortalama puanı ve toplam yorum sayısını hesapla
     const [reviewStats] = await db.execute(
@@ -75,17 +86,16 @@ const [reviews] = await db.execute(
     // `averageRating` ve `totalReviews` değişkenlerini al
     const { totalReviews, averageRating } = reviewStats[0];
 
-   // Ortalama puanı düzgün şekilde kontrol et ve sayıya çevir
-const roundedAverageRating = averageRating !== null && averageRating !== undefined
-? parseFloat(averageRating).toFixed(1)
-: 0;
-
+    // Ortalama puanı düzgün şekilde kontrol et ve sayıya çevir
+    const roundedAverageRating = averageRating !== null && averageRating !== undefined
+      ? parseFloat(averageRating).toFixed(1)
+      : 0;
 
     // Şablonu render et
     res.render('product-details', {
       product: product[0],
       features,
-      reviews,
+      reviews: reviewsWithReplies, // Yorumları ve yanıtları birleştirerek gönder
       sort,
       totalReviews,
       averageRating: roundedAverageRating, // Yuvarlanmış puanı gönder
