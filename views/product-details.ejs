@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ürün Detayları</title>
+  <title><%= product.name %> - Ürün Detayı</title>
   <link rel="stylesheet" href="/styles/style.css">
   <style>
     /* Genel Stil ve Ortalamalar */
@@ -241,6 +241,65 @@
     #add-to-cart-form button:hover {
       background-color: #d81b60;
     }
+
+    .feature-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.feature-button {
+  background-color: #f4f4f4 !important;
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.feature-button img {
+  max-width: 50px;
+  max-height: 50px;
+}
+
+.feature-button span {
+  display: block;
+  margin-top: 5px;
+}
+
+.feature-button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Seçili butonun arka planını değiştirme */
+.feature-button.selected {
+  background-color: #ff66b2; /* Örneğin, pembe bir renk */
+  border-color: #ff3385;     /* Kenarlık rengini de değiştirebiliriz */
+  color: white;              /* Yazı rengini beyaz yapabiliriz */
+}
+
+.feature-button.selected img {
+  filter: brightness(1.2);   /* Resmi biraz daha parlak gösterebiliriz */
+}
+/* Seçili özelliğin stilini değiştirecek CSS */
+.feature-button {
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+.feature-button.selected {
+    background-color: #ff8c00; /* Seçilen özelliğin arka plan rengi */
+    color: white;
+    border-color: #ff8c00; /* Seçilen özellik sınır rengi */
+}
+
+.feature-button img {
+    margin-right: 5px;
+}
   </style>
 </head>
 <body class="page-product-details">
@@ -252,15 +311,42 @@
     <!-- Ürün görselini tıklanabilir hale getirdik -->
     <img src="<%= product.image_url %>" alt="<%= product.name %>" width="300" id="product-image">
 
-    <!-- Modal yapısı -->
-    <div id="imageModal" class="modal">
-      <span class="close" id="closeModal">&times;</span>
-      <img class="modal-content" id="modalImage">
-    </div>
-
     <p id="product-description"><%= product.description %></p>
     <p id="product-price">Fiyat: <%= product.price %> ₺</p>
 
+    <!-- Özellikler Seçimi -->
+    <section id="product-features">
+      <h2>Ürün Özellikleri</h2>
+      <% if (features && features.length > 0) { %>
+        <form action="/cart/<%= product.id %>/add-to-cart" method="POST" id="add-to-cart-form">
+          <input type="hidden" name="productId" value="<%= product.id %>">
+          <input type="hidden" name="featureId" id="selected-feature-id" value="null"> <!-- Varsayılan olarak null olabilir -->
+          <input type="hidden" name="featureName" id="selected-feature-name" value=""> <!-- Varsayılan boş -->
+          
+          <!-- Özelliklerin her biri için buton oluşturuyoruz -->
+          <label>Özellik Seçin:</label><br>
+          <div class="feature-buttons">
+              <% features.forEach(feature => { %>
+                  <button type="button" class="feature-button" data-feature-id="<%= feature.id %>" data-feature-name="<%= feature.feature_name %>">
+                      <% if (feature.feature_image) { %>
+                          <img src="<%= feature.feature_image %>" alt="<%= feature.feature_name %>" width="50" height="50">
+                      <% } %>
+                      <span><%= feature.feature_name %></span>
+                  </button>
+              <% }) %>
+          </div><br>
+          
+          <label for="quantity">Adet:</label>
+          <input type="number" name="quantity" id="quantity" value="1" min="1" required><br>
+          
+          <button type="submit">Sepete Ekle</button>
+      </form>
+      <% } else { %>
+        <p>Bu ürünün herhangi bir özelliği bulunmamaktadır.</p>
+      <% } %>
+    </section>
+    
+    <!-- Yorumlar -->
     <section id="reviews-section">
       <h2 id="reviews-title">Yorumlar</h2>
 
@@ -342,9 +428,37 @@
         <button type="submit">Sepete Ekle</button>
       </form>
     </section>
+
   </main>
 
   <script>
+    // Özellik butonlarına tıklama efekti ekleyelim
+const featureButtons = document.querySelectorAll('.feature-button');
+let selectedFeatureId = null;
+let selectedFeatureName = '';
+// Her butona tıklanabilirlik ekleyelim
+featureButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        // Daha önce seçili olan butonu eski renginden çıkar
+        featureButtons.forEach(btn => {
+            btn.classList.remove('selected');
+        });
+
+        // Yeni tıklanan butonu seçili yap
+        this.classList.add('selected');
+
+        // Seçilen özelliğin ID ve adı bilgilerini al
+        selectedFeatureId = this.getAttribute('data-feature-id');
+        selectedFeatureName = this.getAttribute('data-feature-name');
+
+        // Konsola yazdır
+        console.log(`Seçilen Özellik ID: ${selectedFeatureId}, Özellik Adı: ${selectedFeatureName}`);
+        
+        // Formdaki hidden input'lara bilgileri güncelle
+        document.getElementById('selected-feature-id').value = selectedFeatureId;
+        document.getElementById('selected-feature-name').value = selectedFeatureName;
+    });
+});
     // Ürün görseli modal'ını gösterme ve kapama fonksiyonları
     var modal = document.getElementById('imageModal');
     var modalImg = document.getElementById("modalImage");
@@ -359,8 +473,41 @@
     span.onclick = function() {
       modal.style.display = "none";
     }
+
+    document.querySelectorAll('.feature-button').forEach(button => {
+  button.addEventListener('click', function() {
+    // Seçilen featureId'yi ve featureName'yi al
+    const featureId = this.getAttribute('data-feature-id');
+    const featureName = this.getAttribute('data-feature-name');
+    
+    // Hidden input'lara featureId ve featureName değerlerini ekle
+    document.getElementById('selected-feature-id').value = featureId;
+    document.getElementById('selected-feature-name').value = featureName;
+    
+    // Seçilen butonun stilini değiştir
+    document.querySelectorAll('.feature-button').forEach(b => b.classList.remove('selected')); // Tüm butonların stilini sıfırla
+    this.classList.add('selected'); // Seçilen butonun stilini değiştir
+  });
+});
+
+
+
+document.querySelector('#add-to-cart-form').addEventListener('submit', function(event) {
+  const selectedFeatureId = document.getElementById('selected-feature-id').value;
+  
+  // Eğer feature_id seçilmemişse formu göndermeyi engelle
+  if (!selectedFeatureId || selectedFeatureId === '') {
+    alert('Lütfen bir özellik seçin.');
+    event.preventDefault(); // Formun gönderilmesini engelle
+  }
+});
+
   </script>
 
   <%- include('partials/footer') %>
 </body>
+
+
+
+
 </html>
