@@ -18,6 +18,36 @@ USE `eticaret`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `campaigns`
+--
+
+DROP TABLE IF EXISTS `campaigns`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `campaigns` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `product_id` int NOT NULL,
+  `discount_amount` decimal(10,2) NOT NULL,
+  `code` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `campaigns_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `campaigns`
+--
+
+LOCK TABLES `campaigns` WRITE;
+/*!40000 ALTER TABLE `campaigns` DISABLE KEYS */;
+INSERT INTO `campaigns` VALUES (1,1,10.00,'WINTER2024','2024-12-21 23:37:51'),(2,2,20.00,'SUMMER2024','2024-12-21 23:37:51'),(3,3,15.00,'NEWYEAR2024','2024-12-21 23:37:51');
+/*!40000 ALTER TABLE `campaigns` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `cart`
 --
 
@@ -28,14 +58,14 @@ CREATE TABLE `cart` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
   `product_id` int DEFAULT NULL,
-  `quantity` int DEFAULT '1',
+  `quantity` int DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `feature_id` int DEFAULT NULL,
+  `feature_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `product_id` (`product_id`),
-  CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `feature_id` (`feature_id`),
+  CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`feature_id`) REFERENCES `product_features` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +74,7 @@ CREATE TABLE `cart` (
 
 LOCK TABLES `cart` WRITE;
 /*!40000 ALTER TABLE `cart` DISABLE KEYS */;
-INSERT INTO `cart` VALUES (5,7,1,1,'2024-12-11 11:39:16'),(15,8,1,1,'2024-12-12 12:20:13'),(16,9,3,3,'2024-12-12 13:10:43');
+INSERT INTO `cart` VALUES (9,8,5,5,'2024-12-21 22:07:44',2,'mavi'),(10,8,1,1,'2024-12-21 22:07:49',NULL,NULL),(13,9,2,3,'2024-12-22 09:41:39',NULL,NULL);
 /*!40000 ALTER TABLE `cart` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +121,7 @@ CREATE TABLE `comment_replies` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `comment_replies_ibfk_1` FOREIGN KEY (`review_id`) REFERENCES `reviews` (`id`) ON DELETE CASCADE,
   CONSTRAINT `comment_replies_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,37 +130,65 @@ CREATE TABLE `comment_replies` (
 
 LOCK TABLES `comment_replies` WRITE;
 /*!40000 ALTER TABLE `comment_replies` DISABLE KEYS */;
-INSERT INTO `comment_replies` VALUES (1,2,8,'neden beğenmdiniz ?','2024-12-12 11:21:07'),(2,3,8,'asdadsad','2024-12-12 11:21:36'),(3,5,8,'asda','2024-12-12 11:21:50'),(4,6,8,'asdad','2024-12-12 12:19:39'),(5,6,8,'asdadd','2024-12-12 12:19:48');
+INSERT INTO `comment_replies` VALUES (3,5,8,'asda','2024-12-12 11:21:50'),(4,6,8,'asdad','2024-12-12 12:19:39'),(5,6,8,'asdadd','2024-12-12 12:19:48'),(6,14,9,'asdasd','2024-12-21 23:09:36'),(7,13,9,'asdad','2024-12-21 23:09:43'),(8,13,9,'asdads','2024-12-21 23:12:46'),(9,14,9,'asdasdad','2024-12-21 23:12:50'),(10,11,9,'bence de','2024-12-21 23:13:02'),(11,14,9,'saqeadsad','2024-12-21 23:18:10'),(12,7,9,'bencde de güzel','2024-12-21 23:18:31'),(13,14,9,'admin mi sin','2024-12-21 23:20:01'),(14,11,9,'bende gzeü','2024-12-21 23:20:34'),(15,16,9,'bende beğenmedim','2024-12-21 23:21:15'),(16,16,8,'bende beğenmedim','2024-12-21 23:21:34'),(17,16,8,'bende beğendim','2024-12-21 23:22:58'),(18,16,8,'bende beğendimm 2','2024-12-21 23:29:34'),(19,17,9,'bende abe','2024-12-21 23:30:28');
 /*!40000 ALTER TABLE `comment_replies` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `comparison`
+-- Table structure for table `comparisons`
 --
 
-DROP TABLE IF EXISTS `comparison`;
+DROP TABLE IF EXISTS `comparisons`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `comparison` (
+CREATE TABLE `comparisons` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `product_id` int NOT NULL,
+  `product1_id` int NOT NULL,
+  `product2_id` int NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `product_id` (`product_id`),
-  CONSTRAINT `comparison_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `comparison_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+  KEY `product1_id` (`product1_id`),
+  KEY `product2_id` (`product2_id`),
+  CONSTRAINT `comparisons_ibfk_1` FOREIGN KEY (`product1_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `comparisons_ibfk_2` FOREIGN KEY (`product2_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `comparisons`
+--
+
+LOCK TABLES `comparisons` WRITE;
+/*!40000 ALTER TABLE `comparisons` DISABLE KEYS */;
+INSERT INTO `comparisons` VALUES (1,1,5,'2024-12-22 23:43:24');
+/*!40000 ALTER TABLE `comparisons` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `discounted_products`
+--
+
+DROP TABLE IF EXISTS `discounted_products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `discounted_products` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cart_id` int NOT NULL,
+  `old_price` decimal(10,2) DEFAULT NULL,
+  `new_price` decimal(10,2) DEFAULT NULL,
+  `discount_code` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `comparison`
+-- Dumping data for table `discounted_products`
 --
 
-LOCK TABLES `comparison` WRITE;
-/*!40000 ALTER TABLE `comparison` DISABLE KEYS */;
-/*!40000 ALTER TABLE `comparison` ENABLE KEYS */;
+LOCK TABLES `discounted_products` WRITE;
+/*!40000 ALTER TABLE `discounted_products` DISABLE KEYS */;
+/*!40000 ALTER TABLE `discounted_products` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -152,7 +210,7 @@ CREATE TABLE `order_items` (
   CONSTRAINT `FK_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
   CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
   CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -161,7 +219,7 @@ CREATE TABLE `order_items` (
 
 LOCK TABLES `order_items` WRITE;
 /*!40000 ALTER TABLE `order_items` DISABLE KEYS */;
-INSERT INTO `order_items` VALUES (3,3,1,12,25000.00),(4,3,3,55,200.00),(5,4,1,1,25000.00),(6,4,2,1,50000.00),(7,5,1,1,25000.00),(8,6,2,1,50000.00),(9,7,2,1,50000.00),(10,9,1,1,25000.00),(11,9,2,1,50000.00);
+INSERT INTO `order_items` VALUES (3,3,1,12,25000.00),(4,3,3,55,200.00),(5,4,1,1,25000.00),(6,4,2,1,50000.00),(7,5,1,1,25000.00),(8,6,2,1,50000.00),(9,7,2,1,50000.00),(10,9,1,1,25000.00),(11,9,2,1,50000.00),(12,10,3,3,200.00);
 /*!40000 ALTER TABLE `order_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -187,7 +245,7 @@ CREATE TABLE `orders` (
   KEY `fk_shipping_company` (`shipping_company_id`),
   CONSTRAINT `fk_shipping_company` FOREIGN KEY (`shipping_company_id`) REFERENCES `shipping_companies` (`id`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -196,8 +254,36 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,6,51000.00,'pending','2024-12-11 14:20:20',5,'Ankara','pending',''),(2,6,301000.00,'pending','2024-12-11 14:56:02',4,'keçiören','pending',''),(3,6,311000.00,'pending','2024-12-11 15:01:39',2,'yenimahalala','pending',''),(4,8,75000.00,'pending','2024-12-11 15:04:59',2,'esertepe','pending',''),(5,8,25000.00,'pending','2024-12-11 15:12:08',1,'wefwaqefrqwaefwaqfaqw','delivered',''),(6,8,50000.00,'pending','2024-12-11 15:19:43',2,'aagasdad','pending',''),(7,8,50000.00,'pending','2024-12-11 15:20:00',1,'Ankara Keçiören','pending',''),(8,8,0.00,'pending','2024-12-11 15:36:38',1,'Ankara Keçiören','pending',''),(9,8,75000.00,'pending','2024-12-11 15:42:54',1,'asdads','pending','paypal');
+INSERT INTO `orders` VALUES (1,6,51000.00,'pending','2024-12-11 14:20:20',5,'Ankara','pending',''),(2,6,301000.00,'pending','2024-12-11 14:56:02',4,'keçiören','pending',''),(3,6,311000.00,'pending','2024-12-11 15:01:39',2,'yenimahalala','pending',''),(4,8,75000.00,'pending','2024-12-11 15:04:59',2,'esertepe','pending',''),(5,8,25000.00,'pending','2024-12-11 15:12:08',1,'wefwaqefrqwaefwaqfaqw','delivered',''),(6,8,50000.00,'pending','2024-12-11 15:19:43',2,'aagasdad','pending',''),(7,8,50000.00,'pending','2024-12-11 15:20:00',1,'Ankara Keçiören','pending',''),(8,8,0.00,'pending','2024-12-11 15:36:38',1,'Ankara Keçiören','pending',''),(9,8,75000.00,'pending','2024-12-11 15:42:54',1,'asdads','pending','paypal'),(10,9,600.00,'pending','2024-12-20 10:16:24',2,'Ankara','delivered','paypal');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `product_features`
+--
+
+DROP TABLE IF EXISTS `product_features`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `product_features` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `product_id` int DEFAULT NULL,
+  `feature_name` varchar(100) DEFAULT NULL,
+  `feature_image` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `product_features_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product_features`
+--
+
+LOCK TABLES `product_features` WRITE;
+/*!40000 ALTER TABLE `product_features` DISABLE KEYS */;
+INSERT INTO `product_features` VALUES (1,5,'siyah','/uploads/c9ac5b134e82f184ae555883d96fd075'),(2,5,'mavi','/uploads/6e3566126a67873873eb86da409847b2');
+/*!40000 ALTER TABLE `product_features` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -219,7 +305,7 @@ CREATE TABLE `products` (
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -228,7 +314,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'İphone 11','128 GB beyaz',25000.00,100,1,'/uploads/164f5c23df954cf168bb5e806f9a9a17','2024-12-11 02:16:14'),(2,'Asus Tuf','4050 Ekran Kartı',50000.00,200,1,'/uploads/9f6bc017d0bfcc8e75bfcfbccc3797f9','2024-12-11 02:28:08'),(3,'makyaj','mat ruj ',200.00,100,2,'/uploads/165d0002e94fd52151fcef81da41fd0a','2024-12-11 12:05:12');
+INSERT INTO `products` VALUES (1,'İphone 11','128 GB beyaz',25000.00,100,1,'/uploads/164f5c23df954cf168bb5e806f9a9a17','2024-12-11 02:16:14'),(2,'Asus Tuf','4050 Ekran Kartı',50000.00,200,1,'/uploads/9f6bc017d0bfcc8e75bfcfbccc3797f9','2024-12-11 02:28:08'),(3,'makyaj','mat ruj ',200.00,100,2,'/uploads/165d0002e94fd52151fcef81da41fd0a','2024-12-11 12:05:12'),(4,'İphone 11','Apple İphone 11',25000.00,100,1,'/uploads/2e119cbc0c200c6220809e42cafd6ac6','2024-12-21 09:50:20'),(5,'iphone 11111','asazcasd',30000.00,1000,1,'/uploads/faac641a07197d22310b51efd1ef3f02','2024-12-21 12:12:13');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -250,7 +336,7 @@ CREATE TABLE `review_votes` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `review_votes_ibfk_1` FOREIGN KEY (`review_id`) REFERENCES `reviews` (`id`) ON DELETE CASCADE,
   CONSTRAINT `review_votes_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -259,7 +345,7 @@ CREATE TABLE `review_votes` (
 
 LOCK TABLES `review_votes` WRITE;
 /*!40000 ALTER TABLE `review_votes` DISABLE KEYS */;
-INSERT INTO `review_votes` VALUES (1,6,8,1,'2024-12-12 12:20:07'),(2,6,4,1,'2024-12-12 11:35:29'),(3,5,4,-1,'2024-12-12 11:35:41');
+INSERT INTO `review_votes` VALUES (1,6,8,1,'2024-12-12 12:20:07'),(2,6,4,1,'2024-12-12 11:35:29'),(3,5,4,-1,'2024-12-12 11:35:41'),(4,6,9,1,'2024-12-20 10:59:31'),(5,8,9,1,'2024-12-21 10:15:09'),(6,11,9,1,'2024-12-21 23:13:58'),(7,17,9,1,'2024-12-21 23:30:31');
 /*!40000 ALTER TABLE `review_votes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -283,7 +369,7 @@ CREATE TABLE `reviews` (
   CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
   CONSTRAINT `reviews_chk_1` CHECK ((`rating` between 1 and 5))
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -292,7 +378,7 @@ CREATE TABLE `reviews` (
 
 LOCK TABLES `reviews` WRITE;
 /*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
-INSERT INTO `reviews` VALUES (2,6,1,2,'asdad','2024-12-11 03:11:39'),(3,7,1,4,'çok beğenmedim','2024-12-11 11:39:10'),(4,6,3,2,'beğenmewdim','2024-12-11 12:05:48'),(5,8,1,3,'xcvscdfvs','2024-12-12 11:21:47'),(6,8,1,1,'asdadd','2024-12-12 11:23:30');
+INSERT INTO `reviews` VALUES (5,8,1,3,'xcvscdfvs','2024-12-12 11:21:47'),(6,8,1,1,'asdadd','2024-12-12 11:23:30'),(7,9,4,3,'güzel','2024-12-21 10:03:05'),(8,9,4,5,'asdadasdd','2024-12-21 10:03:14'),(9,9,1,2,'yeni','2024-12-21 10:26:50'),(10,9,1,3,'en yeni','2024-12-21 11:03:19'),(11,9,5,3,'asdad','2024-12-21 12:50:23'),(12,8,1,3,'güzel - düzenlendi','2024-12-21 22:19:30'),(13,8,1,5,'çok iyi','2024-12-21 22:32:00'),(14,3,1,4,'admin yazdı','2024-12-21 23:03:41'),(15,9,5,1,'dasda','2024-12-21 23:14:05'),(16,9,2,1,'beğenmedim','2024-12-21 23:21:09'),(17,3,2,3,'yöneticiiym ve beğendim','2024-12-21 23:30:14');
 /*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -338,7 +424,7 @@ CREATE TABLE `support_messages` (
   `response` text,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -347,7 +433,7 @@ CREATE TABLE `support_messages` (
 
 LOCK TABLES `support_messages` WRITE;
 /*!40000 ALTER TABLE `support_messages` DISABLE KEYS */;
-INSERT INTO `support_messages` VALUES (1,0,'sdfsf','fsf@a','asdad',NULL,'2024-12-11 18:09:47'),(2,0,'Hüseyin','btdhaslan@gmail.com','hata mevcut',NULL,'2024-12-11 18:16:45'),(3,0,'asdas','dada@asdad','dsdad','asdada','2024-12-11 18:18:37'),(4,8,'asdadd','d@asda','asdad','halloldu','2024-12-11 18:24:33');
+INSERT INTO `support_messages` VALUES (1,0,'sdfsf','fsf@a','asdad',NULL,'2024-12-11 18:09:47'),(2,0,'Hüseyin','btdhaslan@gmail.com','hata mevcut',NULL,'2024-12-11 18:16:45'),(3,0,'asdas','dada@asdad','dsdad','asdada','2024-12-11 18:18:37'),(4,8,'asdadd','d@asda','asdad','halloldu','2024-12-11 18:24:33'),(5,9,'Hüseyin Aslan','btdhaslan10@gmail.com','adsadadsasdsaddads',NULL,'2024-12-20 10:44:14');
 /*!40000 ALTER TABLE `support_messages` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -378,7 +464,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (3,'Kevser Aslan','kevseraslan098@gmail.com','$2b$10$IK/Eqbuo2qka3M04VHk9iumI3.bKCvK5u03GDnKkTCKlH4SigJMLG','05437610998','Pendik Esenyalı','2024-12-11 01:57:06','admin'),(4,'Doğukan Aslan','btdhaslan2@gmail.com','$2b$10$67XI1h94OLXlBwZ8LWGTved9681jJvHMUxafXNLSwB3.rS8Yst5uy','4567891236','asdaddad','2024-12-11 02:29:13','user'),(5,'hüseyin asla','btdhaslan54@gmail.com','$2b$10$gPQqP9QSE4.lwAe3fTjzL.GPctiSGGh9gf33M0C0ZhjgdXnWd13ma','123456789','asdas','2024-12-11 02:51:42','user'),(6,'hüseyin','btdhaslan5@gmail.com','$2b$10$7zsmQ0hglP7ThjqHRtUDVObZpWJhtSCUPj8tfavTO8P8fUeqHHicq','123456789','ankara','2024-12-11 02:59:19','user'),(7,'Hüseyin Aslan','btdhaslan7@gmail.com','$2b$10$QBrRSX8jlZ7.O/xv9ZRnfOHHnyIH0oGIPHDedO.U193PycVA91kQO','123456789','Ankara','2024-12-11 11:37:32','user'),(8,'huso','btdhaslan8@gmail.com','$2b$10$ukwfZnc6L0FqTKab6rPHXOfUacft98B0P43RAF40jnLS0WyLoXDr6','123456','asdasdasdad','2024-12-11 15:04:36','user'),(9,'Hüseyin Aslan','btdhaslan10@gmail.com','$2b$10$jAQCVyikhau4eo1VAAcIPe3kKZM6NpohrfereEzy.56O0Jj5dNRAK','05075807020','19 Mayıs Cad. 19 / 12 Keçiören Ankara','2024-12-12 13:10:02','user');
+INSERT INTO `users` VALUES (3,'Kevser Aslan','kevseraslan098@gmail.com','$2b$10$IK/Eqbuo2qka3M04VHk9iumI3.bKCvK5u03GDnKkTCKlH4SigJMLG','05437610998','Pendik Esenyalı','2024-12-11 01:57:06','admin'),(4,'Doğukan Aslan','btdhaslan2@gmail.com','$2b$10$67XI1h94OLXlBwZ8LWGTved9681jJvHMUxafXNLSwB3.rS8Yst5uy','4567891236','asdaddad','2024-12-11 02:29:13','user'),(5,'hüseyin asla','btdhaslan54@gmail.com','$2b$10$gPQqP9QSE4.lwAe3fTjzL.GPctiSGGh9gf33M0C0ZhjgdXnWd13ma','123456789','asdas','2024-12-11 02:51:42','user'),(6,'hüseyin','btdhaslan5@gmail.com','$2b$10$7zsmQ0hglP7ThjqHRtUDVObZpWJhtSCUPj8tfavTO8P8fUeqHHicq','123456789','ankara','2024-12-11 02:59:19','user'),(7,'Hüseyin Aslan','btdhaslan7@gmail.com','$2b$10$QBrRSX8jlZ7.O/xv9ZRnfOHHnyIH0oGIPHDedO.U193PycVA91kQO','123456789','Ankara','2024-12-11 11:37:32','user'),(8,'huso','btdhaslan8@gmail.com','$2b$10$ZNAN3orf/BuezbF.t7B6uOe4jpnRClCNYMxTx3PTlUVxbZ8pLM6sC','123456','asdasdasdad','2024-12-11 15:04:36','user'),(9,'Hüseyin Aslann','btdhaslan10@gmail.com','$2b$10$jAQCVyikhau4eo1VAAcIPe3kKZM6NpohrfereEzy.56O0Jj5dNRAK','05075807020','19 Mayıs Cad. 19 / 12 Keçiören Ankaraaa','2024-12-12 13:10:02','user');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -420,4 +506,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-12 23:38:50
+-- Dump completed on 2024-12-23  2:53:36
