@@ -59,19 +59,22 @@ const adminRoutes = require('./routes/adminRoutes');  // admin  işlemleri rotas
 const contactRoutes = require('./routes/contactRoutes');  // İletişim rotasını dahil ediyoruz
 const aboutRoutes = require('./routes/aboutRoutes');  // About rotasını dahil ediyoruz
 const profileRoutes = require('./routes/profileRoutes');
-
-
+const compareRoutes = require('./routes/compareRoutes');
+const comparisonRoutes = require('./routes/comparisonRoutes');
 
 // Routes tanımlamaları
 app.use('/', homeRoutes);  // Ana sayfa
 app.use('/products', productsRoutes);  // Ürünler
 
 app.use('/cart', cartRoutes);  // Sepet
+app.use('/compare', compareRoutes);  // Karşılaştırma
+app.use('/comparisons', comparisonRoutes);  // Karşılaştırma detay
 app.use('/user', userRoutes);  // Kullanıcı
 app.use('/admin', adminRoutes);  // admin
 app.use('/contact', contactRoutes);  // İletişim sayfası rotası
 app.use('/about', aboutRoutes);  // About sayfası rotası
 app.use('/profile', profileRoutes);  // Profil sayfası rotasını ekle
+
 // 404 Hata Sayfası
 app.use((req, res) => {
   res.status(404).render('404', { title: 'Sayfa Bulunamadı' });

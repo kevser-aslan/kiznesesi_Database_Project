@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaydedilen Karşılaştırmalar</title>
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <main>
+        <h1>Kaydedilen Karşılaştırmalar</h1>
+
+        <% if (comparisons.length > 0) { %>
+            <table border="1" cellpadding="10" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Birinci Ürün</th>
+                        <th>İkinci Ürün</th>
+                        <th>Karşılaştırma Tarihi</th>
+                        <th>Detaylar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% comparisons.forEach(comparison => { %>
+                        <tr>
+                            <td><%= comparison.product1_name %></td>
+                            <td><%= comparison.product2_name %></td>
+                            <td><%= comparison.created_at %></td>
+                            <td>
+                                <a href="/comparisons/<%= comparison.id %>">Detayları Gör</a>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>Henüz kaydedilmiş bir karşılaştırmanız yok.</p>
+        <% } %>
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

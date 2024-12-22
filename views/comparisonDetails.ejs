@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karşılaştırma Detayları</title>
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <main>
+        <h1>Karşılaştırma Detayları</h1>
+
+        <div>
+            <h2>Birinci Ürün</h2>
+            <img src="<%= comparison.product1_image %>" alt="<%= comparison.product1_name %>" width="200">
+            <p>Ad: <%= comparison.product1_name %></p>
+            <p>Açıklama: <%= comparison.product1_description %></p>
+            <p>Fiyat: <%= comparison.product1_price %> ₺</p>
+        </div>
+
+        <div>
+            <h2>İkinci Ürün</h2>
+            <img src="<%= comparison.product2_image %>" alt="<%= comparison.product2_name %>" width="200">
+            <p>Ad: <%= comparison.product2_name %></p>
+            <p>Açıklama: <%= comparison.product2_description %></p>
+            <p>Fiyat: <%= comparison.product2_price %> ₺</p>
+        </div>
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+</html>
