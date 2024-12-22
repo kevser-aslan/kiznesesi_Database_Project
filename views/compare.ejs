@@ -1,0 +1,94 @@
+<body class="page-compare">
+    <%- include('partials/header') %>
+  
+    <main class="compare-page">
+      <h1>Ürün Karşılaştırma</h1>
+      <div class="compare-container">
+        <!-- Sol taraf -->
+        <div class="compare-side">
+          <h2>Ürün 1 Seçimi</h2>
+          <form id="search-form-left" method="GET">
+            <input type="text" name="query" placeholder="Ürün Ara" id="search-input-left">
+            <button type="button" id="search-btn-left">Ara</button>
+          </form>
+          <ul id="search-results-left">
+            <% if (productsLeft.length > 0) { %>
+              <% productsLeft.forEach(product => { %>
+                <li>
+                  <img src="<%= product.image_url %>" alt="<%= product.name %>" width="50">
+                  <span><%= product.name %></span>
+                  <button type="button" class="select-product-btn" data-id="<%= product.id %>" data-side="left">Seç</button>
+                </li>
+              <% }) %>
+            <% } %>
+          </ul>
+        </div>
+  
+        <!-- Sağ taraf -->
+        <div class="compare-side">
+          <h2>Ürün 2 Seçimi</h2>
+          <form id="search-form-right" method="GET">
+            <input type="text" name="query" placeholder="Ürün Ara" id="search-input-right">
+            <button type="button" id="search-btn-right">Ara</button>
+          </form>
+          <ul id="search-results-right">
+            <% if (productsRight.length > 0) { %>
+              <% productsRight.forEach(product => { %>
+                <li>
+                  <img src="<%= product.image_url %>" alt="<%= product.name %>" width="50">
+                  <span><%= product.name %></span>
+                  <button type="button" class="select-product-btn" data-id="<%= product.id %>" data-side="right">Seç</button>
+                </li>
+              <% }) %>
+            <% } %>
+          </ul>
+        </div>
+      </div>
+  
+      <form action="/compare/result" method="POST">
+        <input type="hidden" name="product1_id" id="selected-product-left">
+        <input type="hidden" name="product2_id" id="selected-product-right">
+        <button type="submit" id="compare-btn" disabled>Karşılaştır</button>
+      </form>
+    </main>
+  
+    <%- include('partials/footer') %>
+  
+    <script>
+      // Ürün seçim ve arama
+      const searchButtons = document.querySelectorAll('button[id^="search-btn"]');
+      const selectButtons = document.querySelectorAll('.select-product-btn');
+      const compareButton = document.getElementById('compare-btn');
+      const selectedLeft = document.getElementById('selected-product-left');
+      const selectedRight = document.getElementById('selected-product-right');
+  
+      searchButtons.forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const side = btn.id.includes('left') ? 'left' : 'right';
+          const query = document.getElementById(`search-input-${side}`).value;
+          const response = await fetch(`/compare/search?side=${side}&query=${query}`);
+          const results = await response.json();
+          // Listeyi güncelle
+          const resultsList = document.getElementById(`search-results-${side}`);
+          resultsList.innerHTML = results.map(p => `
+            <li>
+              <img src="${p.image_url}" alt="${p.name}" width="50">
+              <span>${p.name}</span>
+              <button type="button" class="select-product-btn" data-id="${p.id}" data-side="${side}">Seç</button>
+            </li>
+          `).join('');
+        });
+      });
+  
+      document.body.addEventListener('click', (e) => {
+        if (e.target.classList.contains('select-product-btn')) {
+          const productId = e.target.dataset.id;
+          const side = e.target.dataset.side;
+          if (side === 'left') selectedLeft.value = productId;
+          if (side === 'right') selectedRight.value = productId;
+          compareButton.disabled = !(selectedLeft.value && selectedRight.value);
+        }
+      });
+    </script>
+  </body>
+  

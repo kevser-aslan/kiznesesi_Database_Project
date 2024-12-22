@@ -1,0 +1,32 @@
+<body class="page-comparison-result">
+    <%- include('partials/header') %>
+  
+    <main>
+      <h1>Ürün Karşılaştırma Sonuçları</h1>
+      <div class="comparison-results">
+        <div class="product-column">
+          <h2><%= product1.name %></h2>
+          <img src="<%= product1.image_url %>" alt="<%= product1.name %>" width="150">
+          <p><%= product1.description %></p>
+          <p>Fiyat: <%= product1.price %> ₺</p>
+          <p>Stok: <%= product1.stock %></p>
+        </div>
+        <div class="product-column">
+          <h2><%= product2.name %></h2>
+          <img src="<%= product2.image_url %>" alt="<%= product2.name %>" width="150">
+          <p><%= product2.description %></p>
+          <p>Fiyat: <%= product2.price %> ₺</p>
+          <p>Stok: <%= product2.stock %></p>
+        </div>
+      </div>
+  
+      <form action="/compare/save" method="POST">
+        <input type="hidden" name="product1_id" value="<%= product1.id %>">
+        <input type="hidden" name="product2_id" value="<%= product2.id %>">
+        <button type="submit">Karşılaştırmayı Kaydet</button>
+      </form>
+    </main>
+  
+    <%- include('partials/footer') %>
+  </body>
+  
