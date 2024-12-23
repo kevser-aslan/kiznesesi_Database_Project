@@ -4,6 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Karşılaştırma Detayları</title>
+    <style>
+        /* Genel sayfa stili */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f7fb;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Sayfa yüksekliği tam ekran yapar */
+        }
+
+        /* Başlık stili */
+        h1 {
+            text-align: center;
+            color: #e91e63; /* Kızıl tonları */
+            font-size: 2.5rem;
+            margin-top: 20px;
+        }
+
+        /* Ürün karşılaştırma bölümü */
+        main {
+            flex-grow: 1;
+            padding: 30px;
+        }
+
+        .product-comparison {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .product-column {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 45%;
+            text-align: center;
+        }
+
+        .product-column h2 {
+            color: #e91e63;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .product-column img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .product-column p {
+            font-size: 1rem;
+            color: #555;
+            margin: 10px 0;
+        }
+
+        /* Geri Dön butonu */
+        .back-btn-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .back-btn {
+            background-color: #e91e63;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #c2185b; /* Hover efekti */
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <%- include('partials/header') %>
@@ -11,20 +101,26 @@
     <main>
         <h1>Karşılaştırma Detayları</h1>
 
-        <div>
-            <h2>Birinci Ürün</h2>
-            <img src="<%= comparison.product1_image %>" alt="<%= comparison.product1_name %>" width="200">
-            <p>Ad: <%= comparison.product1_name %></p>
-            <p>Açıklama: <%= comparison.product1_description %></p>
-            <p>Fiyat: <%= comparison.product1_price %> ₺</p>
+        <div class="back-btn-container">
+            <a href="/user/user-dashboard" class="back-btn">Geri Dön</a>
         </div>
 
-        <div>
-            <h2>İkinci Ürün</h2>
-            <img src="<%= comparison.product2_image %>" alt="<%= comparison.product2_name %>" width="200">
-            <p>Ad: <%= comparison.product2_name %></p>
-            <p>Açıklama: <%= comparison.product2_description %></p>
-            <p>Fiyat: <%= comparison.product2_price %> ₺</p>
+        <div class="product-comparison">
+            <div class="product-column">
+                <h2>Birinci Ürün</h2>
+                <img src="<%= comparison.product1_image %>" alt="<%= comparison.product1_name %>" width="200">
+                <p>Ad: <%= comparison.product1_name %></p>
+                <p>Açıklama: <%= comparison.product1_description %></p>
+                <p>Fiyat: <%= comparison.product1_price %> ₺</p>
+            </div>
+
+            <div class="product-column">
+                <h2>İkinci Ürün</h2>
+                <img src="<%= comparison.product2_image %>" alt="<%= comparison.product2_name %>" width="200">
+                <p>Ad: <%= comparison.product2_name %></p>
+                <p>Açıklama: <%= comparison.product2_description %></p>
+                <p>Fiyat: <%= comparison.product2_price %> ₺</p>
+            </div>
         </div>
     </main>
 

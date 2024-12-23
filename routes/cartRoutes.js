@@ -279,13 +279,14 @@ router.get('/order/:orderId', async (req, res) => {
         );
 
       // Siparişin ürünlerini doğru bir şekilde alırken, name kullanılmalı
-const [orderItems] = await db.execute(
-    `SELECT oi.quantity, p.name AS product_name, p.price
-    FROM order_items oi
-    JOIN products p ON oi.product_id = p.id
-    WHERE oi.order_id = ?`,
-    [orderId]
-);
+      const [orderItems] = await db.execute(
+        `SELECT oi.quantity, p.name AS product_name, p.price, p.image_url
+        FROM order_items oi
+        JOIN products p ON oi.product_id = p.id
+        WHERE oi.order_id = ?`,
+        [orderId]
+    );
+    
 
 
         if (orderDetails.length === 0) {

@@ -1,8 +1,114 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ürün Karşılaştırma Sonuçları</title>
+  <link rel="stylesheet" href="/styles/style.css">
+  <style>
+    /* Genel sayfa stili */
+body.page-comparison-result {
+  font-family: Arial, sans-serif;
+  background-color: #f8f7fb;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* Başlık stili */
+h1 {
+  text-align: center;
+  color: #e91e63; /* Kızıl tonları */
+  font-size: 2.5rem;
+  margin-top: 20px;
+}
+
+/* Geri Dön butonu */
+.back-btn-container {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.back-btn {
+  background-color: #e91e63;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: #c2185b; /* Hover efekti */
+}
+
+/* Ürün karşılaştırma sonuçları */
+.comparison-results {
+  display: flex;
+  justify-content: space-around;
+  margin: 30px;
+}
+
+.product-column {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 45%;
+  text-align: center;
+}
+
+.product-column h2 {
+  color: #e91e63;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.product-column img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.product-column p {
+  font-size: 1rem;
+  color: #555;
+  margin: 10px 0;
+}
+
+/* Kaydet butonu */
+.save-btn {
+  display: block;
+  width: 200px;
+  margin: 30px auto 0;
+  padding: 12px 20px;
+  background-color: #4caf50; /* Yeşil ton */
+  color: white;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-btn:hover {
+  background-color: #388e3c; /* Hover efekti */
+}
+
+  </style>
+</head>
 <body class="page-comparison-result">
     <%- include('partials/header') %>
   
     <main>
       <h1>Ürün Karşılaştırma Sonuçları</h1>
+
+      <!-- Geri Dön butonu -->
+      <div class="back-btn-container">
+        <a href="/user/user-dashboard" class="back-btn">Geri Dön</a>
+      </div>
+
       <div class="comparison-results">
         <div class="product-column">
           <h2><%= product1.name %></h2>
@@ -19,14 +125,14 @@
           <p>Stok: <%= product2.stock %></p>
         </div>
       </div>
-  
+
       <form action="/compare/save" method="POST">
         <input type="hidden" name="product1_id" value="<%= product1.id %>">
         <input type="hidden" name="product2_id" value="<%= product2.id %>">
-        <button type="submit">Karşılaştırmayı Kaydet</button>
+        <button type="submit" class="save-btn">Karşılaştırmayı Kaydet</button>
       </form>
     </main>
   
     <%- include('partials/footer') %>
-  </body>
-  
+</body>
+</html>

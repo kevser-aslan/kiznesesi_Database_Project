@@ -1,22 +1,146 @@
-<!-- views/order-history.ejs -->
-<h3>Sipariş Geçmişiniz</h3>
-<ul>
-    <% orders.forEach(function(order) { %>
-        <li>
-            <p><strong>Sipariş #<%= order.id %></strong> - <%= order.status %></p>
-            <p><strong>Toplam Tutar:</strong> <%= order.total_amount %> TL</p>
-            <p><strong>Sipariş Tarihi:</strong> <%= new Date(order.order_date).toLocaleDateString() %></p>
-            
-            <h4>Ürünler:</h4>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sipariş Geçmişiniz</title>
+    <style>
+        /* Genel sayfa stili */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f7fb;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Sayfa yüksekliği tam ekran yapar */
+        }
+
+        /* Başlık stili */
+        h3 {
+            text-align: center;
+            color: #e91e63; /* Kızıl tonları */
+            font-size: 2rem;
+            margin-top: 20px;
+        }
+
+        /* Geri Dön butonu */
+        .back-btn-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .back-btn {
+            background-color: #e91e63;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #c2185b; /* Hover efekti */
+        }
+
+        /* Siparişler listesi */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        li p {
+            margin: 5px 0;
+        }
+
+        h4 {
+            color: #e91e63;
+        }
+
+        /* Ürünler listesi */
+        ul li ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li ul li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        ul li ul li img {
+            margin-right: 10px;
+        }
+
+        a {
+            color: #e91e63;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #c2185b;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <main>
+        <h3>Sipariş Geçmişiniz</h3>
+
+        <div class="back-btn-container">
+            <a href="/user/user-dashboard" class="back-btn">Geri Dön</a>
+        </div>
+
+        <% if (orders.length > 0) { %>
             <ul>
-                <% order.items.forEach(function(item) { %>
+                <% orders.forEach(function(order) { %>
                     <li>
-                        <img src="<%= item.image_url %>" alt="<%= item.product_name %>" width="50">
-                        <p><%= item.product_name %> - <%= item.quantity %> x <%= item.price %> TL</p>
+                        <p><strong>Sipariş #<%= order.id %></strong> - <%= order.status %></p>
+                        <p><strong>Toplam Tutar:</strong> <%= order.total_amount %> TL</p>
+                        <p><strong>Sipariş Tarihi:</strong> <%= new Date(order.order_date).toLocaleDateString() %></p>
+
+                        <h4>Ürünler:</h4>
+                        <ul>
+                            <% order.items.forEach(function(item) { %>
+                                <li>
+                                    <img src="<%= item.image_url %>" alt="<%= item.product_name %>" width="50">
+                                    <p><%= item.product_name %> - <%= item.quantity %> x <%= item.price %> TL</p>
+                                </li>
+                            <% }); %>
+                        </ul>
+
+                        <a href="/cart/order/<%= order.id %>">Sipariş Detayları</a>
                     </li>
                 <% }); %>
             </ul>
-            <a href="/cart/order/<%= order.id %>">Sipariş Detayları</a>
-        </li>
-    <% }); %>
-</ul>
+        <% } else { %>
+            <p>Henüz bir siparişiniz bulunmamaktadır.</p>
+        <% } %>
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+</html>
