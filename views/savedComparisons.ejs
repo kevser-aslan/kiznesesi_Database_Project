@@ -4,6 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kaydedilen Karşılaştırmalar</title>
+    <style>
+        /* Genel sayfa stili */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f7fb;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Sayfa yüksekliği tam ekran yapar */
+        }
+
+        /* Başlık stili */
+        h1 {
+            text-align: center;
+            color: #e91e63; /* Kızıl tonları */
+            font-size: 2.5rem;
+            margin-top: 20px;
+        }
+
+        /* Geri Dön butonu */
+        .back-btn-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .back-btn {
+            background-color: #e91e63;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #c2185b; /* Hover efekti */
+        }
+
+        /* Karşılaştırmalar tablosu */
+        table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #e91e63;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        td {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        a {
+            color: #e91e63;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #c2185b;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <%- include('partials/header') %>
@@ -11,8 +96,12 @@
     <main>
         <h1>Kaydedilen Karşılaştırmalar</h1>
 
+        <div class="back-btn-container">
+            <a href="/user/user-dashboard" class="back-btn">Geri Dön</a>
+        </div>
+
         <% if (comparisons.length > 0) { %>
-            <table border="1" cellpadding="10" cellspacing="0">
+            <table>
                 <thead>
                     <tr>
                         <th>Birinci Ürün</th>

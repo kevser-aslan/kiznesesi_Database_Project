@@ -1,8 +1,132 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ürün Karşılaştırma</title>
+  <link rel="stylesheet" href="/styles/style.css">
+  <style>
+    /* Genel Sayfa Stili */
+body.page-compare {
+    font-family: 'Arial', sans-serif;
+    background-color: #ffe0f0; /* Kızıl pembe arka plan */
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Başlık */
+h1 {
+    text-align: center;
+    color: #ff66b2;
+    margin-top: 20px;
+}
+
+/* Geri Dön Butonu */
+.back-btn-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.back-btn {
+    padding: 10px 20px;
+    background-color: #ff66b2;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.back-btn:hover {
+    background-color: #ff4d94;
+}
+
+/* Karşılaştırma sayfası kapsayıcı */
+.compare-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+/* Sol ve Sağ Ürün Seçim Alanı */
+.compare-side {
+    width: 48%;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Arama Formu */
+input[type="text"] {
+    width: 80%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+button {
+    padding: 8px 12px;
+    background-color: #ff66b2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ff4d94;
+}
+
+/* Arama sonuçları listesi */
+#search-results-left, #search-results-right {
+    list-style: none;
+    padding: 0;
+}
+
+#search-results-left li, #search-results-right li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#search-results-left img, #search-results-right img {
+    margin-right: 10px;
+}
+
+.select-product-btn {
+    background-color: #ff66b2;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.select-product-btn:hover {
+    background-color: #ff4d94;
+}
+
+/* Karşılaştır butonu */
+#compare-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+  </style>
+</head>
 <body class="page-compare">
     <%- include('partials/header') %>
   
     <main class="compare-page">
       <h1>Ürün Karşılaştırma</h1>
+
+      <!-- Geri Dön butonu -->
+      <div class="back-btn-container">
+        <a href="/user/user-dashboard" class="back-btn">Geri Dön</a>
+      </div>
+
       <div class="compare-container">
         <!-- Sol taraf -->
         <div class="compare-side">
@@ -23,7 +147,7 @@
             <% } %>
           </ul>
         </div>
-  
+
         <!-- Sağ taraf -->
         <div class="compare-side">
           <h2>Ürün 2 Seçimi</h2>
@@ -44,16 +168,16 @@
           </ul>
         </div>
       </div>
-  
+
       <form action="/compare/result" method="POST">
         <input type="hidden" name="product1_id" id="selected-product-left">
         <input type="hidden" name="product2_id" id="selected-product-right">
         <button type="submit" id="compare-btn" disabled>Karşılaştır</button>
       </form>
     </main>
-  
+
     <%- include('partials/footer') %>
-  
+
     <script>
       // Ürün seçim ve arama
       const searchButtons = document.querySelectorAll('button[id^="search-btn"]');
@@ -61,7 +185,7 @@
       const compareButton = document.getElementById('compare-btn');
       const selectedLeft = document.getElementById('selected-product-left');
       const selectedRight = document.getElementById('selected-product-right');
-  
+
       searchButtons.forEach(btn => {
         btn.addEventListener('click', async (e) => {
           const side = btn.id.includes('left') ? 'left' : 'right';
@@ -79,7 +203,7 @@
           `).join('');
         });
       });
-  
+
       document.body.addEventListener('click', (e) => {
         if (e.target.classList.contains('select-product-btn')) {
           const productId = e.target.dataset.id;
@@ -90,5 +214,5 @@
         }
       });
     </script>
-  </body>
-  
+</body>
+</html>

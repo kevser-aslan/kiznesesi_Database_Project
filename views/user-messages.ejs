@@ -4,31 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Destek Mesajlarım</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f0f7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #ff85b3;
+            padding: 15px 20px;
+            text-align: center;
+            color: white;
+            font-size: 1.5em;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #ff85b3;
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .message-list {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            list-style: none;
+            margin: 0;
+        }
+
+        .message-list li {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        .message-list li:last-child {
+            border-bottom: none;
+        }
+
+        .message-header {
+            font-weight: bold;
+            color: #ff85b3;
+        }
+
+        .message-content {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+
+        .message-response {
+            font-style: italic;
+            color: #888;
+        }
+
+        .message-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            background-color: #ff85b3;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            background-color: #ff4d94;
+        }
+
+        footer {
+            background-color: #ff85b3;
+            padding: 10px;
+            text-align: center;
+            color: white;
+            margin-top: auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>Destek Mesajlarım</h1>
+    <header>
+        Destek Mesajlarım
+    </header>
 
-    <% if (messages.length > 0) { %>
-        <ul>
-            <% messages.forEach(function(message) { %>
-                <li>
-                    <strong>Mesaj:</strong> <%= message.message %> <br>
-                    <strong>Gönderim Tarihi:</strong> <%= message.created_at %> <br>
-                    <strong>Durum:</strong> 
-                    <% if (message.response) { %>
-                        <em>Cevaplandı</em> <br>
-                        <strong>Admin Cevabı:</strong> <%= message.response %>
-                    <% } else { %>
-                        Henüz cevaplanmadı.
-                    <% } %>
-                    <hr>
-                </li>
-            <% }); %>
-        </ul>
-    <% } else { %>
-        <p>Hiç mesajınız bulunmamaktadır.</p>
-    <% } %>
+    <main>
+        <h1>Destek Mesajlarım</h1>
 
-    <a href="/">Anasayfaya Dön</a>
+        <% if (messages.length > 0) { %>
+            <ul class="message-list">
+                <% messages.forEach(function(message) { %>
+                    <li>
+                        <div class="message-header">
+                            <strong>Mesaj:</strong> <%= message.message %>
+                        </div>
+                        <div class="message-content">
+                            <strong>Gönderim Tarihi:</strong> <%= message.created_at %>
+                        </div>
+                        <div class="message-response">
+                            <strong>Durum:</strong> 
+                            <% if (message.response) { %>
+                                <em>Cevaplandı</em><br>
+                                <strong>Admin Cevabı:</strong> <%= message.response %>
+                            <% } else { %>
+                                Henüz cevaplanmadı.
+                            <% } %>
+                        </div>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>Hiç mesajınız bulunmamaktadır.</p>
+        <% } %>
+
+        <div class="message-footer">
+            <a href="/user/user-dashboard" class="back-btn">Geri Dön</a>
+        </div>
+    </main>
+
+    <footer>
+        © 2024 Kız Neşesi - Tüm hakları saklıdır.
+    </footer>
 </body>
 </html>
