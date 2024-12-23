@@ -4,36 +4,129 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Destek Mesajları</title>
+    <style>
+        /* Genel Sayfa Stili */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #fce4ec; /* Pembe pastel arka plan */
+            color: #333;
+        }
+
+        h1 {
+            color: #d81b60; /* Koyu pembe başlık */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        a {
+            color: #c2185b; /* Pembe link rengi */
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #880e4f; /* Koyu pembe hover */
+        }
+
+        /* Mesaj Listesi */
+        .messages-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .message-item {
+            background-color: #ffffff;
+            border: 1px solid #f8bbd0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-item strong {
+            color: #d81b60;
+        }
+
+        /* Cevap Bölümü */
+        .response-form {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #fce4ec;
+            border-radius: 5px;
+        }
+
+        .response-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #f8bbd0;
+            min-height: 100px;
+        }
+
+        .response-form button {
+            background-color: #d81b60;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .response-form button:hover {
+            background-color: #c2185b;
+        }
+
+        /* Hiç Mesaj Durumu */
+        .no-messages {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #d81b60;
+        }
+
+        /* Sayfa Linkleri */
+        .back-link, .admin-dashboard-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            font-size: 1.1rem;
+        }
+    </style>
 </head>
 <body>
     <h1>Destek Mesajları (Admin Paneli)</h1>
 
+    <!-- Admin Dashboard Linki -->
+    <a href="/user/admin-dashboard" class="admin-dashboard-link">Admin Paneline Dön</a>
+
     <% if (messages.length > 0) { %>
-        <ul>
+        <ul class="messages-list">
             <% messages.forEach(function(message) { %>
-                <li>
-                    <strong>Kullanıcı ID:</strong> <%= message.user_id %> <br>
-                    <strong>Email:</strong> <%= message.email %> <br>
-                    <strong>Mesaj:</strong> <%= message.message %> <br>
-                    <strong>Gönderim Tarihi:</strong> <%= message.created_at %> <br>
+                <li class="message-item">
+                    <p><strong>Kullanıcı ID:</strong> <%= message.user_id %></p>
+                    <p><strong>Email:</strong> <%= message.email %></p>
+                    <p><strong>Mesaj:</strong> <%= message.message %></p>
+                    <p><strong>Gönderim Tarihi:</strong> <%= message.created_at %></p>
                     <% if (message.response) { %>
-                        <strong>Cevap:</strong> <%= message.response %>
+                        <p><strong>Cevap:</strong> <%= message.response %></p>
                     <% } else { %>
-                        Henüz cevaplanmadı.
+                        <p>Henüz cevaplanmadı.</p>
                     <% } %>
-                    <form action="/admin/respond/<%= message.id %>" method="POST">
-                        <textarea name="response" placeholder="Cevap yaz..."></textarea>
+                    
+                    <form action="/admin/respond/<%= message.id %>" method="POST" class="response-form">
+                        <textarea name="response" placeholder="Cevap yaz..."></textarea><br>
                         <button type="submit">Cevapla</button>
                     </form>
                     <hr>
                 </li>
             <% }); %>
-            
         </ul>
     <% } else { %>
-        <p>Hiç mesaj bulunmamaktadır.</p>
+        <p class="no-messages">Hiç mesaj bulunmamaktadır.</p>
     <% } %>
 
-    <a href="/">Anasayfaya Dön</a>
+    <a href="/" class="back-link">Anasayfaya Dön</a>
 </body>
 </html>

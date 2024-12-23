@@ -4,40 +4,148 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Genel Sayfa Stili */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffe0f0; /* Kızıl pembe arka plan */
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background-color: #ff66b2; /* Canlı pembe arka plan */
+            padding: 20px 0;
+            color: white;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        header nav ul li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        header nav ul li a {
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        header nav ul li a:hover {
+            color: #ffb3d9; /* Daha açık pembe hover efekti */
+        }
+
+        /* Main Bölümü */
+        main {
+            padding: 40px;
+            text-align: center;
+            background-color: #fff;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #ff66b2;
+        }
+
+        h2 {
+            color: #ff4d94;
+        }
+
+        p {
+            font-size: 1.2rem;
+        }
+
+        a {
+            color: #ff66b2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #ff4d94;
+        }
+
+        /* Linkler ve Cardlar */
+        .link-card {
+            background-color: #ffb3d9;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            display: inline-block;
+            width: 220px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .link-card a {
+            font-size: 18px;
+            color: #ff1a75;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .link-card a:hover {
+            color: #ff4d94;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #ff66b2;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+    </style>
 </head>
 <body>
+
+    <!-- Header -->
     <header>
+        <h1>Admin Dashboard</h1>
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
                 <li><a href="/admin/products">Ürünler</a></li>
-                <li><a href="/admin/products/add">Add Product</a></li>
-                <li><a href="/user/logout">Logout</a></li>
-                
-                    <li><a href="/admin/messages">Gelen Mesajlar</a> - Tüm kullanıcı mesajlarının listesi.</li>
-                   
-              
-                
+                <li><a href="/admin/products/add">Yeni Ürün Ekle</a></li>
+                <li><a href="/admin/messages">Mesajlar</a></li>
+                <li><a href="/user/logout">Çıkış Yap</a></li>
             </ul>
         </nav>
     </header>
 
+    <!-- Main İçeriği -->
     <main>
-        <h1>Welcome, Admin <%= user.name %>!</h1>
+        <h2>Hoş Geldin, Admin <%= user.name %>!</h2>
         <p>Email: <%= user.email %></p>
-        <p>Phone Number: <%= user.phone_number %></p>
-        <p>Role: <%= user.role %></p>
+        <p>Telefon Numarası: <%= user.phone_number %></p>
+        <p>Rol: <%= user.role %></p>
 
-        <h2>Manage Users</h2>
-        <p><a href="/admin/manage-users">Manage users</a></p>
-
-        <h2>View Orders</h2>
-        <p><a href="/admin/orders">View orders</a></p>
+        <div style="margin-top: 40px;">
+           
+            <div class="link-card">
+                <a href="/admin/products">Ürünleri Görüntüle</a>
+            </div>
+        </div>
     </main>
 
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2024 E-Commerce</p>
+        <p>&copy; 2024 Kız Neşesi E-Ticaret</p>
     </footer>
+
 </body>
 </html>
