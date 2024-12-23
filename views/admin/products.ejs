@@ -4,29 +4,164 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Ürünler</title>
+    <style>
+        /* Genel Sayfa Stili */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #fce4ec; /* Pembe pastel arka plan */
+            color: #333;
+        }
+
+        h1 {
+            color: #d81b60; /* Daha koyu bir pembe ton */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        a {
+            color: #c2185b; /* Pembe tonu link */
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #880e4f; /* Daha koyu pembe hover */
+        }
+
+        /* Admin Dashboard Bağlantısı */
+        .admin-dashboard-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #d81b60;
+        }
+
+        .admin-dashboard-link:hover {
+            color: #c2185b;
+        }
+
+        /* Ürün Kartları */
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .product-card {
+            background-color: #ffffff; /* Beyaz kart arka planı */
+            border: 1px solid #f8bbd0;
+            border-radius: 8px;
+            width: 300px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card h2 {
+            font-size: 1.5rem;
+            color: #d81b60;
+            margin-bottom: 10px;
+        }
+
+        .product-card p {
+            margin: 5px 0;
+        }
+
+        .product-card .actions {
+            margin-top: 15px;
+        }
+
+        .product-card .actions a {
+            margin-right: 10px;
+        }
+
+        /* Yorumlar Bölümü */
+        .comments-container {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #fce4ec;
+            border: 1px solid #f8bbd0;
+            border-radius: 5px;
+            max-height: 150px; /* Maksimum yükseklik */
+            overflow-y: auto; /* Kaydırma eklendi */
+        }
+
+        .comments-container ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .comments-container li {
+            margin: 10px 0;
+            background-color: #fff;
+            border: 1px solid #f8bbd0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        strong {
+            color: #d81b60;
+        }
+
+        /* Form Stilleri */
+        form {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #fce4ec;
+            border: 1px solid #f8bbd0;
+            border-radius: 5px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #880e4f;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #f8bbd0;
+        }
+
+        button {
+            background-color: #d81b60;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #c2185b;
+        }
+    </style>
 </head>
 <body>
     <h1>Ürünler</h1>
+    
+    <!-- Admin Dashboard Bağlantısı -->
+    <a class="admin-dashboard-link" href="/user/admin-dashboard">Admin Dashboard'a Dön</a>
+    
     <a href="/admin/products/add">Yeni Ürün Ekle</a><br><br>
-    <table>
-        <tr>
-            <th>Ürün Adı</th>
-            <th>Fiyat</th>
-            <th>Stok</th>
-            <th>İşlemler</th>
-            <th>Yorumlar</th>
-        </tr>
+    <div class="product-container">
         <% products.forEach(function(product) { %>
-            <tr>
-                <td><%= product.name %></td>
-                <td><%= product.price %></td>
-                <td><%= product.stock %></td>
-                <td>
+            <div class="product-card">
+                <h2><%= product.name %></h2>
+                <p><strong>Fiyat:</strong> <%= product.price %></p>
+                <p><strong>Stok:</strong> <%= product.stock %></p>
+                <div class="actions">
                     <a href="/admin/products/edit/<%= product.id %>">Düzenle</a> | 
                     <a href="/admin/products/delete/<%= product.id %>">Sil</a>
-                </td>
-                <td>
-                    <!-- Yorumları göster -->
+                </div>
+                <div class="comments-container">
                     <ul>
                         <% product.reviews.forEach(function(review) { %>
                             <li>
@@ -35,23 +170,21 @@
                                     <strong>(Admin Yorumudur)</strong>
                                 <% } %>
                                 </p>
-                                <!-- Yorum düzenleme ve silme işlemleri -->
                                 <a href="/admin/products/review/edit/<%= review.id %>">Düzenle</a> | 
                                 <a href="/admin/products/review/delete/<%= review.id %>">Sil</a>
                             </li>
                         <% }); %>
                     </ul>
-                    <!-- Yeni yorum ekleme formu -->
-                    <form action="/admin/products/review/add/<%= product.id %>" method="POST">
-                        <label for="rating">Puan:</label>
-                        <input type="number" id="rating" name="rating" min="1" max="5" required><br>
-                        <label for="comment">Yorum:</label>
-                        <textarea id="comment" name="comment" required></textarea><br>
-                        <button type="submit">Yorum Yap</button>
-                    </form>
-                </td>
-            </tr>
+                </div>
+                <form action="/admin/products/review/add/<%= product.id %>" method="POST">
+                    <label for="rating">Puan:</label>
+                    <input type="number" id="rating" name="rating" min="1" max="5" required><br>
+                    <label for="comment">Yorum:</label>
+                    <textarea id="comment" name="comment" required></textarea><br>
+                    <button type="submit">Yorum Yap</button>
+                </form>
+            </div>
         <% }); %>
-    </table>
+    </div>
 </body>
 </html>
