@@ -42,8 +42,14 @@ router.get('/:id', async (req, res) => {
     // Ürün özelliklerini al
     const [features] = await db.execute('SELECT * FROM product_features WHERE product_id = ?', [productId]);
 
-    // Yorum sıralama mantığını belirle
-    const orderBy = getReviewSortOrder(sort);
+    // Yorum sıralama mantığını doğrudan burada belirleyelim
+    let orderBy = 'reviews.created_at DESC'; // Varsayılan sıralama: En yeni
+    if (sort === 'highest') {
+      orderBy = 'reviews.rating DESC'; // En yüksek puanlı sıralama
+    } else if (sort === 'helpful') {
+      // Yanıt sayısını saymak için alt sorgu ekliyoruz
+      orderBy = `(SELECT COUNT(*) FROM comment_replies WHERE review_id = reviews.id) DESC`; // En fazla yanıt sayısına göre sıralama
+    }
 
     // Yorumları al
     const [reviews] = await db.execute(
@@ -53,7 +59,7 @@ router.get('/:id', async (req, res) => {
        FROM reviews
        JOIN users ON reviews.user_id = users.id
        WHERE reviews.product_id = ? 
-       ORDER BY reviews.created_at DESC`,
+       ORDER BY ${orderBy}`,
       [productId]
     );
 
@@ -83,10 +89,8 @@ router.get('/:id', async (req, res) => {
       [productId]
     );
 
-    // `averageRating` ve `totalReviews` değişkenlerini al
-    const { totalReviews, averageRating } = reviewStats[0];
-
     // Ortalama puanı düzgün şekilde kontrol et ve sayıya çevir
+    const { totalReviews, averageRating } = reviewStats[0];
     const roundedAverageRating = averageRating !== null && averageRating !== undefined
       ? parseFloat(averageRating).toFixed(1)
       : 0;
@@ -105,6 +109,7 @@ router.get('/:id', async (req, res) => {
     res.status(500).send('Sunucu hatası');
   }
 });
+
 
 
 // Yorumlara yanıt ekleme
