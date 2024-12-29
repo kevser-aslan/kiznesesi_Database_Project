@@ -48,7 +48,7 @@
     }
 
     /* Ürün Görseli */
-    #product-image {
+    #productImageThumbnail {
       margin-top: 20px;
       display: block;
       margin-left: auto;
@@ -58,7 +58,7 @@
       border-radius: 8px;
     }
 
-    #product-image:hover {
+    #productImageThumbnail:hover {
       transform: scale(1.05);
     }
 
@@ -92,6 +92,47 @@
       font-weight: bold;
       cursor: pointer;
     }
+/* Modal genel stili */
+.modal {
+  display: none; /* Varsayılan olarak gizli */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8); /* Arkaplan */
+}
+
+/* Modal içerik resmi */
+.modal-content {
+  margin: auto;
+  display: block;
+height: 95%;  /* max-width: 700px; */
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Kapama butonu */
+.close {
+  position: absolute;
+  top: 20px;
+  right: 35px;
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Görsel açıklama yazısı */
+#caption {
+  margin: 15px auto;
+  text-align: center;
+  color: #fff;
+  font-size: 20px;
+  padding: 10px 0;
+}
 
   /* Yorumlar */
 #reviews-section {
@@ -308,8 +349,15 @@
   <main class="main-content">
     <h1 id="product-name"><%= product.name %></h1>
     
-    <!-- Ürün görselini tıklanabilir hale getirdik -->
-    <img src="<%= product.image_url %>" alt="<%= product.name %>" width="300" id="product-image">
+    <!-- Ürün görseli -->
+<img src="<%= product.image_url %>" alt="<%= product.name %>" width="300" id="productImageThumbnail">
+
+<!-- Modal yapısı -->
+<div id="productImageModal" class="modal">
+  <span id="productImageCloseButton" class="close">&times;</span>
+  <img class="modal-content" id="productImageModalContent">
+  <div id="productImageCaption"></div>
+</div>
 
     <p id="product-description"><%= product.description %></p>
     <p id="product-price">Fiyat: <%= product.price %> ₺</p>
@@ -440,6 +488,32 @@
   </main>
 
   <script>
+    // Modal elemanlarını seçiyoruz (daha spesifik isimlendirme)
+const productImageModal = document.getElementById('productImageModal');
+const productImageModalContent = document.getElementById('productImageModalContent');
+const productImageCaption = document.getElementById('productImageCaption');
+const productImageThumbnail = document.getElementById('productImageThumbnail');
+const productImageCloseButton = document.getElementById('productImageCloseButton');
+
+// Ürün görseline tıklanınca modal açılır
+productImageThumbnail.onclick = function () {
+  productImageModal.style.display = 'block';
+  productImageModalContent.src = this.src;
+  productImageCaption.innerHTML = this.alt;
+};
+
+// Kapama butonuna tıklanınca modal kapanır
+productImageCloseButton.onclick = function () {
+  productImageModal.style.display = 'none';
+};
+
+// Modal dışında herhangi bir yere tıklanırsa modal kapanır
+window.onclick = function (event) {
+  if (event.target === productImageModal) {
+    productImageModal.style.display = 'none';
+  }
+};
+
   const featureButtons = document.querySelectorAll('.feature-button');
   const featureIdInput = document.getElementById('selected-feature-id');
   const featureNameInput = document.getElementById('selected-feature-name');
